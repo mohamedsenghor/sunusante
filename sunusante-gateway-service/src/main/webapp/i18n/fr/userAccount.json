@@ -1,0 +1,30 @@
+{
+  "sunusanteGatewayServiceApp": {
+    "userAccount": {
+      "home": {
+        "title": "UserAccounts",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau User Account",
+        "createOrEditLabel": "Créer ou éditer un User Account",
+        "notFound": "Aucun User Account trouvé"
+      },
+      "created": "Un nouveau User Account a été créé avec l'identifiant {{ param }}",
+      "updated": "Le User Account avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le User Account avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le User Account {{ id }} ?"
+      },
+      "detail": {
+        "title": "User Account"
+      },
+      "id": "ID",
+      "mfaSecret": "Mfa Secret",
+      "role": "Role",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified Date",
+      "internalUser": "Internal User"
+    }
+  }
+}

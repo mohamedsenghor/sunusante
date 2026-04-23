@@ -1,0 +1,64 @@
+/**
+ * DMP Microservice (Standalone)
+ * Core medical records, consultations, and IoT data.
+ */
+
+application {
+  config {
+    baseName sunusanteDmpService,
+    applicationType microservice,
+    packageName dev.sunusante.dmp,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    serverPort 9042,
+    serviceDiscoveryType eureka,
+    messageBroker kafka,
+    nativeLanguage fr,
+    languages [fr, en],
+    testFrameworks [gatling, cucumber]
+  }
+  entities MedicalEntry, Prescription
+}
+
+enum MedicalEntryCategory {
+  CONSULTATION,
+  IMAGING,
+  LAB,
+  OTHER
+}
+
+/* Entities */
+entity MedicalEntry {
+  patientPseudo String required, // Lien pseudonyme du patient pour éviter les Personal Information Identifiers (PII) directs
+  category MedicalEntryCategory required
+  content TextBlob, // Données de santé chiffrées
+  confidentialityLevel Integer // Pour contrôle d'accès dynamique
+
+  // Audit fields
+  createdBy String,
+  createdDate Instant,
+  lastModifiedBy String,
+  lastModifiedDate Instant
+}
+
+entity Prescription {
+  issuedAt Instant,
+  validUntil LocalDate,
+  details TextBlob // Données de prescription chiffrées
+
+  // Audit fields
+  createdBy String,
+  createdDate Instant,
+  lastModifiedBy String,
+  lastModifiedDate Instant
+}
+
+relationship OneToMany {
+  MedicalEntry to Prescription{entry}
+}
+
+
+/* Security & Quality Options */
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

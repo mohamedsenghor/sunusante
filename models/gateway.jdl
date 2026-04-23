@@ -1,0 +1,50 @@
+/**
+ * Gateway Configuration
+ * Utilisation du motif de Composition pour étendre l'User JHipster
+ */
+
+application {
+  config {
+    baseName sunusanteGatewayService,
+    applicationType gateway,
+    packageName dev.sunusante.gateway,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    serviceDiscoveryType eureka,
+    messageBroker kafka,
+    reactive true,
+    clientFramework react,
+    nativeLanguage fr,
+    languages [fr, en],
+    testFrameworks [gatling, cucumber, cypress],
+    serverPort 9040
+  }
+  entities UserAccount
+}
+
+/**
+ * IAM - Identity Management
+ * Application du principe de Moindre Privilège
+ */
+entity UserAccount {
+  mfaSecret String // Pour le MFA recommandé dans votre support
+  role UserRole
+
+  // Audit fields
+  createdBy String,
+  createdDate Instant,
+  lastModifiedBy String,
+  lastModifiedDate Instant
+}
+
+enum UserRole {
+  ROLE_PATIENT, ROLE_DOCTOR, ROLE_ADMIN
+}
+
+relationship OneToOne {
+  UserAccount{internalUser(login)} to User with builtInEntity
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

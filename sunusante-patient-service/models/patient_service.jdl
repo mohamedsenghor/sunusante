@@ -1,0 +1,39 @@
+/**
+ * Patient Microservice (PII Storage)
+ * Gère les données d'identification du patient
+ */
+
+entity Patient {
+  login String required unique, // Correspondance avec UserAccount
+  pseudo String unique, // Pivot pour pseudonymisation, ID technique pour lier avec Dossier Medical
+  firstName String required,
+  lastName String required,
+  birthDate LocalDate required,
+  idType IdentifierType, // NIN, Acte Naissance, Provisoire, c'est la nature de l'identifiant du patient
+  idValue String // Stocké chiffré, c'est la valeur d'identification réelle du patient
+}
+
+entity LegalGuardian {
+  guardianType String // Père, Mère, Tuteur
+
+  // Audit fields
+  createdBy String,
+  createdDate Instant,
+  lastModifiedBy String,
+  lastModifiedDate Instant
+}
+
+enum IdentifierType {
+  NIN,
+  BIRTH_CERTIFICATE,
+  PROVISIONAL_PARENT_LINK
+
+}
+
+relationship OneToMany {
+  Patient{guardian} to LegalGuardian{dependent}
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

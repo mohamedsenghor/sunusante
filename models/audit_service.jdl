@@ -1,0 +1,46 @@
+/**
+ * Audit Microservice (Standalone)
+ * Dedicated service for security logging and traceability.
+ */
+
+application {
+  config {
+    baseName sunusanteAuditService,
+    applicationType microservice,
+    packageName dev.sunusante.audit,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    serverPort 9043,
+    serviceDiscoveryType eureka,
+    messageBroker kafka,
+    nativeLanguage fr,
+    languages [fr, en],
+    testFrameworks [gatling, cucumber]
+  }
+  entities AuditLog
+}
+
+/**
+ * Traçabilité complète exigée par HDS/RGPD
+ */
+entity AuditLog {
+  timestamp Instant required,
+  principal String required, // Qui a accédé, c'est le login de UserAccount
+  resourceId String required, // Quelle ressource a été accédée (ex: patientTechId, medicalEntryId)
+  action String required, // VIEW, EDIT, DELETE, CREATE, etc.
+  oldValue TextBlob, // Valeur avant modification (pour EDIT)
+  newValue TextBlob, // Valeur après modification (pour EDIT)
+  clientIp String,
+  isSuccess Boolean
+
+  // Audit fields
+  createdBy String,
+  createdDate Instant,
+  lastModifiedBy String,
+  lastModifiedDate Instant
+}
+
+/* Security & Quality Options */
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

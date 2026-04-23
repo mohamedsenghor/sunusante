@@ -1,0 +1,62 @@
+{
+  "annotations": {
+    "changelogDate": "20260423143730"
+  },
+  "applications": "*",
+  "clientRootFolder": "sunusanteDmpService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "patientPseudo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "MedicalEntryCategory",
+      "fieldTypeDocumentation": "DMP Microservice (Standalone)\\nCore medical records, consultations, and IoT data.",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CONSULTATION,IMAGING,LAB,OTHER"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "confidentialityLevel",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "microserviceName": "sunusanteDmpService",
+  "name": "MedicalEntry",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "prescription",
+      "otherEntityRelationshipName": "entry",
+      "relationshipName": "prescription",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

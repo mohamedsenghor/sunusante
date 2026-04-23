@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20260423143642"
+  },
+  "applications": "*",
+  "databaseType": "sql",
+  "documentation": "IAM - Identity Management\\nApplication du principe de Moindre Privilège",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "mfaSecret",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "UserRole",
+      "fieldValues": "ROLE_PATIENT,ROLE_DOCTOR,ROLE_ADMIN"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "UserAccount",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "internalUser",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
