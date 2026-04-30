@@ -3,25 +3,6 @@
  * Utilisation du motif de Composition pour étendre l'User JHipster
  */
 
-application {
-  config {
-    baseName sunusanteGatewayService,
-    applicationType gateway,
-    packageName dev.sunusante.gateway,
-    authenticationType jwt,
-    prodDatabaseType postgresql,
-    serviceDiscoveryType eureka,
-    messageBroker kafka,
-    reactive true,
-    clientFramework react,
-    nativeLanguage fr,
-    languages [fr, en],
-    testFrameworks [gatling, cucumber, cypress],
-    serverPort 9040
-  }
-  entities UserAccount
-}
-
 /**
  * IAM - Identity Management
  * Application du principe de Moindre Privilège

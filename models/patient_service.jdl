@@ -3,23 +3,6 @@
  * Gère les données d'identification du patient
  */
 
-application {
-  config {
-    baseName sunusantePatientService,
-    applicationType microservice,
-    packageName dev.sunusante.patient,
-    authenticationType jwt,
-    prodDatabaseType postgresql,
-    serverPort 9041,
-    messageBroker kafka,
-    nativeLanguage fr,
-    languages [fr, en],
-    testFrameworks [gatling, cucumber],
-    serviceDiscoveryType eureka
-  }
-  entities Patient, LegalGuardian
-}
-
 entity Patient {
   login String required unique, // Correspondance avec UserAccount
   pseudo String unique, // Pivot pour pseudonymisation, ID technique pour lier avec Dossier Medical

@@ -3,23 +3,6 @@
  * Dedicated service for security logging and traceability.
  */
 
-application {
-  config {
-    baseName sunusanteAuditService,
-    applicationType microservice,
-    packageName dev.sunusante.audit,
-    authenticationType jwt,
-    prodDatabaseType postgresql,
-    serverPort 9043,
-    serviceDiscoveryType eureka,
-    messageBroker kafka,
-    nativeLanguage fr,
-    languages [fr, en],
-    testFrameworks [gatling, cucumber]
-  }
-  entities AuditLog
-}
-
 /**
  * Traçabilité complète exigée par HDS/RGPD
  */

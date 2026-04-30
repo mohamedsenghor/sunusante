@@ -3,23 +3,6 @@
  * Core medical records, consultations, and IoT data.
  */
 
-application {
-  config {
-    baseName sunusanteDmpService,
-    applicationType microservice,
-    packageName dev.sunusante.dmp,
-    authenticationType jwt,
-    prodDatabaseType postgresql,
-    serverPort 9042,
-    serviceDiscoveryType eureka,
-    messageBroker kafka,
-    nativeLanguage fr,
-    languages [fr, en],
-    testFrameworks [gatling, cucumber]
-  }
-  entities MedicalEntry, Prescription
-}
-
 enum MedicalEntryCategory {
   CONSULTATION,
   IMAGING,
