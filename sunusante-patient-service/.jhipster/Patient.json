@@ -29,6 +29,11 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
       "fieldName": "birthDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]

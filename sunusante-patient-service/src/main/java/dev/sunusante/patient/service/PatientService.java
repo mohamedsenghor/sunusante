@@ -101,6 +101,18 @@ public class PatientService {
     }
 
     /**
+     * Get one patient by pseudo.
+     *
+     * @param pseudo the pseudo of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<PatientDTO> findOneByPseudo(String pseudo) {
+        log.debug("Request to get Patient by pseudo : {}", pseudo);
+        return patientRepository.findOneByPseudo(pseudo).map(patientMapper::toDto);
+    }
+
+    /**
      * Delete the patient by id.
      *
      * @param id the id of the entity.

@@ -36,6 +36,7 @@ public class MedicalEntry implements Serializable {
 
     @Lob
     @Column(name = "content")
+    @Convert(converter = dev.sunusante.dmp.util.MedicalDataConverter.class)
     private String content;
 
     @Column(name = "confidentiality_level")

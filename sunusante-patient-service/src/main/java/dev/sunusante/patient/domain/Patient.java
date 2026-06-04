@@ -41,6 +41,9 @@ public class Patient implements Serializable {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
     @NotNull
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
@@ -121,6 +124,19 @@ public class Patient implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Patient email(String email) {
+        this.setEmail(email);
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDate getBirthDate() {
@@ -221,6 +237,7 @@ public class Patient implements Serializable {
             ", pseudo='" + getPseudo() + "'" +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", email='" + getEmail() + "'" +
             ", birthDate='" + getBirthDate() + "'" +
             ", idType='" + getIdType() + "'" +
             ", idValue='" + getIdValue() + "'" +

@@ -49,6 +49,9 @@ class PatientResourceIT {
     private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+
     private static final LocalDate DEFAULT_BIRTH_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_BIRTH_DATE = LocalDate.now(ZoneId.systemDefault());
 
@@ -95,6 +98,7 @@ class PatientResourceIT {
             .pseudo(DEFAULT_PSEUDO)
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
+            .email(DEFAULT_EMAIL)
             .birthDate(DEFAULT_BIRTH_DATE)
             .idType(DEFAULT_ID_TYPE)
             .idValue(DEFAULT_ID_VALUE);
@@ -113,6 +117,7 @@ class PatientResourceIT {
             .pseudo(UPDATED_PSEUDO)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
+            .email(UPDATED_EMAIL)
             .birthDate(UPDATED_BIRTH_DATE)
             .idType(UPDATED_ID_TYPE)
             .idValue(UPDATED_ID_VALUE);
@@ -258,6 +263,7 @@ class PatientResourceIT {
             .andExpect(jsonPath("$.[*].pseudo").value(hasItem(DEFAULT_PSEUDO)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE.toString())))
             .andExpect(jsonPath("$.[*].idType").value(hasItem(DEFAULT_ID_TYPE.toString())))
             .andExpect(jsonPath("$.[*].idValue").value(hasItem(DEFAULT_ID_VALUE)));
@@ -279,6 +285,7 @@ class PatientResourceIT {
             .andExpect(jsonPath("$.pseudo").value(DEFAULT_PSEUDO))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE.toString()))
             .andExpect(jsonPath("$.idType").value(DEFAULT_ID_TYPE.toString()))
             .andExpect(jsonPath("$.idValue").value(DEFAULT_ID_VALUE));
@@ -308,6 +315,7 @@ class PatientResourceIT {
             .pseudo(UPDATED_PSEUDO)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
+            .email(UPDATED_EMAIL)
             .birthDate(UPDATED_BIRTH_DATE)
             .idType(UPDATED_ID_TYPE)
             .idValue(UPDATED_ID_VALUE);
@@ -396,7 +404,7 @@ class PatientResourceIT {
         Patient partialUpdatedPatient = new Patient();
         partialUpdatedPatient.setId(patient.getId());
 
-        partialUpdatedPatient.birthDate(UPDATED_BIRTH_DATE).idType(UPDATED_ID_TYPE);
+        partialUpdatedPatient.login(UPDATED_LOGIN).pseudo(UPDATED_PSEUDO).lastName(UPDATED_LAST_NAME);
 
         restPatientMockMvc
             .perform(
@@ -429,6 +437,7 @@ class PatientResourceIT {
             .pseudo(UPDATED_PSEUDO)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
+            .email(UPDATED_EMAIL)
             .birthDate(UPDATED_BIRTH_DATE)
             .idType(UPDATED_ID_TYPE)
             .idValue(UPDATED_ID_VALUE);

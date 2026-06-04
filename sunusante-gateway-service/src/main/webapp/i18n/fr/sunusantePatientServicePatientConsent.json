@@ -1,0 +1,32 @@
+{
+  "sunusanteGatewayServiceApp": {
+    "sunusantePatientServicePatientConsent": {
+      "home": {
+        "title": "PatientConsents",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Patient Consent",
+        "createOrEditLabel": "Créer ou éditer un Patient Consent",
+        "notFound": "Aucun Patient Consent trouvé"
+      },
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Patient Consent {{ id }} ?"
+      },
+      "detail": {
+        "title": "Patient Consent"
+      },
+      "id": "ID",
+      "patientPseudo": "Patient Pseudo",
+      "doctorLogin": "Doctor Login",
+      "consentDate": "Consent Date",
+      "expiryDate": "Expiry Date",
+      "status": "Status"
+    }
+  },
+  "sunusantePatientServiceApp": {
+    "sunusantePatientServicePatientConsent": {
+      "created": "Un nouveau Patient Consent a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Patient Consent avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Patient Consent avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

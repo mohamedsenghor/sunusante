@@ -315,6 +315,8 @@ class LegalGuardianResourceIT {
         LegalGuardian partialUpdatedLegalGuardian = new LegalGuardian();
         partialUpdatedLegalGuardian.setId(legalGuardian.getId());
 
+        partialUpdatedLegalGuardian.guardianType(UPDATED_GUARDIAN_TYPE).createdBy(UPDATED_CREATED_BY).createdDate(UPDATED_CREATED_DATE);
+
         restLegalGuardianMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedLegalGuardian.getId())

@@ -13,6 +13,21 @@ entity Patient {
   idValue String // Stocké chiffré, c'est la valeur d'identification réelle du patient
 }
 
+/**
+ * Consentement pour le partage de dossier médical
+ */
+entity PatientConsent {
+  patientPseudo String required,
+  doctorLogin String required,
+  consentDate Instant,
+  expiryDate Instant,
+  status ConsentStatus
+}
+
+enum ConsentStatus {
+  ACTIVE, EXPIRED, REVOKED, PENDING
+}
+
 entity LegalGuardian {
   guardianType String // Père, Mère, Tuteur
 

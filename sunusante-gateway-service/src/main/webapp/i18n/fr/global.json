@@ -8,7 +8,10 @@
       "entities": {
         "main": "Entités",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "userAccount": "User Account"
+        "userAccount": "User Account",
+        "sunusantePatientServicePatient": "Patient",
+        "sunusantePatientServiceLegalGuardian": "Legal Guardian",
+        "sunusantePatientServicePatientConsent": "Patient Consent"
       },
       "account": {
         "main": "Compte",
@@ -100,7 +103,8 @@
       "open": "Ouvrir",
       "save": "Sauvegarder",
       "view": "Voir",
-      "show": "Show {{otherEntity}}"
+      "show": "Show {{otherEntity}}",
+      "approve": "Approuver"
     },
     "detail": {
       "field": "Champs",

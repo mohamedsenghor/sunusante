@@ -163,6 +163,19 @@ public class PatientResource {
     }
 
     /**
+     * {@code GET  /patients/pseudo/:pseudo} : get the "pseudo" patient.
+     *
+     * @param pseudo the pseudo of the patientDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the patientDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/pseudo/{pseudo}")
+    public ResponseEntity<PatientDTO> getPatientByPseudo(@PathVariable("pseudo") String pseudo) {
+        log.debug("REST request to get Patient by pseudo : {}", pseudo);
+        Optional<PatientDTO> patientDTO = patientService.findOneByPseudo(pseudo);
+        return ResponseUtil.wrapOrNotFound(patientDTO);
+    }
+
+    /**
      * {@code DELETE  /patients/:id} : delete the "id" patient.
      *
      * @param id the id of the patientDTO to delete.
