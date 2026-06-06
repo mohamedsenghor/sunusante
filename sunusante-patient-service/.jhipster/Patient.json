@@ -58,6 +58,13 @@
       "relationshipName": "guardian",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "patientConsent",
+      "otherEntityRelationshipName": "patient",
+      "relationshipName": "consent",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

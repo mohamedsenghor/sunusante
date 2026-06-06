@@ -1,6 +1,7 @@
 package dev.sunusante.patient.domain;
 
 import static dev.sunusante.patient.domain.PatientConsentTestSamples.*;
+import static dev.sunusante.patient.domain.PatientTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.sunusante.patient.web.rest.TestUtil;
@@ -20,5 +21,17 @@ class PatientConsentTest {
 
         patientConsent2 = getPatientConsentSample2();
         assertThat(patientConsent1).isNotEqualTo(patientConsent2);
+    }
+
+    @Test
+    void patientTest() {
+        PatientConsent patientConsent = getPatientConsentRandomSampleGenerator();
+        Patient patientBack = getPatientRandomSampleGenerator();
+
+        patientConsent.setPatient(patientBack);
+        assertThat(patientConsent.getPatient()).isEqualTo(patientBack);
+
+        patientConsent.patient(null);
+        assertThat(patientConsent.getPatient()).isNull();
     }
 }

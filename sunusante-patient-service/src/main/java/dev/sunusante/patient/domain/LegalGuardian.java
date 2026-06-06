@@ -37,7 +37,7 @@ public class LegalGuardian implements Serializable {
     private Instant lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "guardians" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "guardians", "consents" }, allowSetters = true)
     private Patient dependent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

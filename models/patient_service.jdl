@@ -18,7 +18,6 @@ entity Patient {
  * Consentement pour le partage de dossier médical
  */
 entity PatientConsent {
-  patientPseudo String required,
   doctorLogin String required,
   consentDate Instant,
   expiryDate Instant,
@@ -48,6 +47,7 @@ enum IdentifierType {
 
 relationship OneToMany {
   Patient{guardian} to LegalGuardian{dependent}
+  Patient{consent} to PatientConsent{patient}
 }
 
 dto * with mapstruct

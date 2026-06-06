@@ -9,11 +9,6 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "patientPseudo",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "doctorLogin",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
@@ -35,7 +30,15 @@
   "microserviceName": "sunusantePatientService",
   "name": "PatientConsent",
   "pagination": "pagination",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "patient",
+      "otherEntityRelationshipName": "consent",
+      "relationshipName": "patient",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceClass"
 }

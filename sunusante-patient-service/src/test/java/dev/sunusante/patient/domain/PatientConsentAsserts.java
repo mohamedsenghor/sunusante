@@ -47,7 +47,6 @@ public class PatientConsentAsserts {
     public static void assertPatientConsentUpdatableFieldsEquals(PatientConsent expected, PatientConsent actual) {
         assertThat(expected)
             .as("Verify PatientConsent relevant properties")
-            .satisfies(e -> assertThat(e.getPatientPseudo()).as("check patientPseudo").isEqualTo(actual.getPatientPseudo()))
             .satisfies(e -> assertThat(e.getDoctorLogin()).as("check doctorLogin").isEqualTo(actual.getDoctorLogin()))
             .satisfies(e -> assertThat(e.getConsentDate()).as("check consentDate").isEqualTo(actual.getConsentDate()))
             .satisfies(e -> assertThat(e.getExpiryDate()).as("check expiryDate").isEqualTo(actual.getExpiryDate()))
@@ -60,5 +59,9 @@ public class PatientConsentAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertPatientConsentUpdatableRelationshipsEquals(PatientConsent expected, PatientConsent actual) {}
+    public static void assertPatientConsentUpdatableRelationshipsEquals(PatientConsent expected, PatientConsent actual) {
+        assertThat(expected)
+            .as("Verify PatientConsent relationships")
+            .satisfies(e -> assertThat(e.getPatient()).as("check patient").isEqualTo(actual.getPatient()));
+    }
 }

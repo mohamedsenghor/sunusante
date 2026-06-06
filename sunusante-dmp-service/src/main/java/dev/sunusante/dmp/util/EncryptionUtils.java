@@ -22,8 +22,6 @@ public class EncryptionUtils {
 
     public EncryptionUtils(@Value("${jhipster.security.authentication.jwt.base64-secret}") String secret) {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
-        // Use first 16 bytes for AES-128 or 32 for AES-256. 
-        // JWT secret is usually long enough.
         byte[] finalKey = new byte[16];
         System.arraycopy(keyBytes, 0, finalKey, 0, 16);
         this.keySpec = new SecretKeySpec(finalKey, "AES");

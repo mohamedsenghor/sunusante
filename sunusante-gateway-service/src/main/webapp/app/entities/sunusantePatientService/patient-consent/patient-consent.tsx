@@ -9,8 +9,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities, approveEntity } from './patient-consent.reducer';
-import { ConsentStatus } from 'app/shared/model/enumerations/consent-status.model';
+import { getEntities } from './patient-consent.reducer';
 
 export const PatientConsent = () => {
   const dispatch = useAppDispatch();
@@ -79,10 +78,6 @@ export const PatientConsent = () => {
 
   const handleSyncList = () => {
     sortEntities();
-  };
-
-  const handleApprove = id => {
-    dispatch(approveEntity(id));
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
@@ -180,14 +175,6 @@ export const PatientConsent = () => {
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      {patientConsent.status === ConsentStatus.PENDING && (
-                        <Button color="success" size="sm" onClick={() => handleApprove(patientConsent.id)} data-cy="entityApproveButton">
-                          <FontAwesomeIcon icon="check" />{' '}
-                          <span className="d-none d-md-inline">
-                            <Translate contentKey="entity.action.approve">Approve</Translate>
-                          </span>
-                        </Button>
-                      )}
                       <Button tag={Link} to={`/patient-consent/${patientConsent.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">

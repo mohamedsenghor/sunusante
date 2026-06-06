@@ -73,8 +73,7 @@ public class PatientConsentGatlingTest extends Simulation {
                         .body(
                             StringBody(
                                 "{" +
-                                "\"patientPseudo\": \"SAMPLE_TEXT\"" +
-                                ", \"doctorLogin\": \"SAMPLE_TEXT\"" +
+                                "\"doctorLogin\": \"SAMPLE_TEXT\"" +
                                 ", \"consentDate\": \"2020-01-01T00:00:00.000Z\"" +
                                 ", \"expiryDate\": \"2020-01-01T00:00:00.000Z\"" +
                                 ", \"status\": \"ACTIVE\"" +

@@ -59,6 +59,10 @@ public class Patient implements Serializable {
     @JsonIgnoreProperties(value = { "dependent" }, allowSetters = true)
     private Set<LegalGuardian> guardians = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient")
+    @JsonIgnoreProperties(value = { "patient" }, allowSetters = true)
+    private Set<PatientConsent> consents = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -206,6 +210,37 @@ public class Patient implements Serializable {
     public Patient removeGuardian(LegalGuardian legalGuardian) {
         this.guardians.remove(legalGuardian);
         legalGuardian.setDependent(null);
+        return this;
+    }
+
+    public Set<PatientConsent> getConsents() {
+        return this.consents;
+    }
+
+    public void setConsents(Set<PatientConsent> patientConsents) {
+        if (this.consents != null) {
+            this.consents.forEach(i -> i.setPatient(null));
+        }
+        if (patientConsents != null) {
+            patientConsents.forEach(i -> i.setPatient(this));
+        }
+        this.consents = patientConsents;
+    }
+
+    public Patient consents(Set<PatientConsent> patientConsents) {
+        this.setConsents(patientConsents);
+        return this;
+    }
+
+    public Patient addConsent(PatientConsent patientConsent) {
+        this.consents.add(patientConsent);
+        patientConsent.setPatient(this);
+        return this;
+    }
+
+    public Patient removeConsent(PatientConsent patientConsent) {
+        this.consents.remove(patientConsent);
+        patientConsent.setPatient(null);
         return this;
     }
 

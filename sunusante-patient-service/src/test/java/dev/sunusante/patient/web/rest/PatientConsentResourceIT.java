@@ -37,9 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PatientConsentResourceIT {
 
-    private static final String DEFAULT_PATIENT_PSEUDO = "AAAAAAAAAA";
-    private static final String UPDATED_PATIENT_PSEUDO = "BBBBBBBBBB";
-
     private static final String DEFAULT_DOCTOR_LOGIN = "AAAAAAAAAA";
     private static final String UPDATED_DOCTOR_LOGIN = "BBBBBBBBBB";
 
@@ -85,7 +82,6 @@ class PatientConsentResourceIT {
      */
     public static PatientConsent createEntity(EntityManager em) {
         PatientConsent patientConsent = new PatientConsent()
-            .patientPseudo(DEFAULT_PATIENT_PSEUDO)
             .doctorLogin(DEFAULT_DOCTOR_LOGIN)
             .consentDate(DEFAULT_CONSENT_DATE)
             .expiryDate(DEFAULT_EXPIRY_DATE)
@@ -101,7 +97,6 @@ class PatientConsentResourceIT {
      */
     public static PatientConsent createUpdatedEntity(EntityManager em) {
         PatientConsent patientConsent = new PatientConsent()
-            .patientPseudo(UPDATED_PATIENT_PSEUDO)
             .doctorLogin(UPDATED_DOCTOR_LOGIN)
             .consentDate(UPDATED_CONSENT_DATE)
             .expiryDate(UPDATED_EXPIRY_DATE)
@@ -166,23 +161,6 @@ class PatientConsentResourceIT {
 
     @Test
     @Transactional
-    void checkPatientPseudoIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        patientConsent.setPatientPseudo(null);
-
-        // Create the PatientConsent, which fails.
-        PatientConsentDTO patientConsentDTO = patientConsentMapper.toDto(patientConsent);
-
-        restPatientConsentMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(patientConsentDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void checkDoctorLoginIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
@@ -210,7 +188,6 @@ class PatientConsentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(patientConsent.getId().intValue())))
-            .andExpect(jsonPath("$.[*].patientPseudo").value(hasItem(DEFAULT_PATIENT_PSEUDO)))
             .andExpect(jsonPath("$.[*].doctorLogin").value(hasItem(DEFAULT_DOCTOR_LOGIN)))
             .andExpect(jsonPath("$.[*].consentDate").value(hasItem(DEFAULT_CONSENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].expiryDate").value(hasItem(DEFAULT_EXPIRY_DATE.toString())))
@@ -229,7 +206,6 @@ class PatientConsentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(patientConsent.getId().intValue()))
-            .andExpect(jsonPath("$.patientPseudo").value(DEFAULT_PATIENT_PSEUDO))
             .andExpect(jsonPath("$.doctorLogin").value(DEFAULT_DOCTOR_LOGIN))
             .andExpect(jsonPath("$.consentDate").value(DEFAULT_CONSENT_DATE.toString()))
             .andExpect(jsonPath("$.expiryDate").value(DEFAULT_EXPIRY_DATE.toString()))
@@ -256,7 +232,6 @@ class PatientConsentResourceIT {
         // Disconnect from session so that the updates on updatedPatientConsent are not directly saved in db
         em.detach(updatedPatientConsent);
         updatedPatientConsent
-            .patientPseudo(UPDATED_PATIENT_PSEUDO)
             .doctorLogin(UPDATED_DOCTOR_LOGIN)
             .consentDate(UPDATED_CONSENT_DATE)
             .expiryDate(UPDATED_EXPIRY_DATE)
@@ -350,7 +325,7 @@ class PatientConsentResourceIT {
         PatientConsent partialUpdatedPatientConsent = new PatientConsent();
         partialUpdatedPatientConsent.setId(patientConsent.getId());
 
-        partialUpdatedPatientConsent.status(UPDATED_STATUS);
+        partialUpdatedPatientConsent.doctorLogin(UPDATED_DOCTOR_LOGIN);
 
         restPatientConsentMockMvc
             .perform(
@@ -382,7 +357,6 @@ class PatientConsentResourceIT {
         partialUpdatedPatientConsent.setId(patientConsent.getId());
 
         partialUpdatedPatientConsent
-            .patientPseudo(UPDATED_PATIENT_PSEUDO)
             .doctorLogin(UPDATED_DOCTOR_LOGIN)
             .consentDate(UPDATED_CONSENT_DATE)
             .expiryDate(UPDATED_EXPIRY_DATE)

@@ -14,9 +14,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="patient_pseudo" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
             <column name="doctor_login" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
@@ -27,6 +24,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="patient_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -52,7 +52,6 @@
                   tableName="patient_consent"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="patient_pseudo" type="string"/>
             <column name="doctor_login" type="string"/>
             <column name="consent_date" type="date"/>
             <column name="expiry_date" type="date"/>

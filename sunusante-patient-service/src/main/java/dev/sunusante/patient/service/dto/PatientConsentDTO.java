@@ -17,9 +17,6 @@ public class PatientConsentDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String patientPseudo;
-
-    @NotNull
     private String doctorLogin;
 
     private Instant consentDate;
@@ -28,20 +25,14 @@ public class PatientConsentDTO implements Serializable {
 
     private ConsentStatus status;
 
+    private PatientDTO patient;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPatientPseudo() {
-        return patientPseudo;
-    }
-
-    public void setPatientPseudo(String patientPseudo) {
-        this.patientPseudo = patientPseudo;
     }
 
     public String getDoctorLogin() {
@@ -76,6 +67,14 @@ public class PatientConsentDTO implements Serializable {
         this.status = status;
     }
 
+    public PatientDTO getPatient() {
+        return patient;
+    }
+
+    public void setPatient(PatientDTO patient) {
+        this.patient = patient;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -102,11 +101,11 @@ public class PatientConsentDTO implements Serializable {
     public String toString() {
         return "PatientConsentDTO{" +
             "id=" + getId() +
-            ", patientPseudo='" + getPatientPseudo() + "'" +
             ", doctorLogin='" + getDoctorLogin() + "'" +
             ", consentDate='" + getConsentDate() + "'" +
             ", expiryDate='" + getExpiryDate() + "'" +
             ", status='" + getStatus() + "'" +
+            ", patient=" + getPatient() +
             "}";
     }
 }

@@ -5,6 +5,7 @@ import dev.sunusante.patient.client.AuditLogClient;
 import dev.sunusante.patient.domain.PatientConsent;
 import dev.sunusante.patient.domain.enumeration.ConsentStatus;
 import dev.sunusante.patient.repository.PatientConsentRepository;
+import dev.sunusante.patient.repository.PatientRepository;
 import dev.sunusante.patient.security.SecurityUtils;
 import dev.sunusante.patient.service.dto.PatientConsentDTO;
 import dev.sunusante.patient.service.mapper.PatientConsentMapper;
@@ -35,14 +36,14 @@ public class PatientConsentService {
 
     private final NotificationProducer notificationProducer;
 
-    private final dev.sunusante.patient.repository.PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     public PatientConsentService(
         PatientConsentRepository patientConsentRepository,
         PatientConsentMapper patientConsentMapper,
         AuditLogClient auditLogClient,
         NotificationProducer notificationProducer,
-        dev.sunusante.patient.repository.PatientRepository patientRepository
+        PatientRepository patientRepository
     ) {
         this.patientConsentRepository = patientConsentRepository;
         this.patientConsentMapper = patientConsentMapper;
@@ -62,12 +63,16 @@ public class PatientConsentService {
         PatientConsent patientConsent = patientConsentMapper.toEntity(patientConsentDTO);
         patientConsent = patientConsentRepository.save(patientConsent);
 
-        String email = patientRepository.findOneByPseudo(patientConsent.getPatientPseudo())
-            .map(dev.sunusante.patient.domain.Patient::getEmail)
-            .orElse(null);
+        String pseudo = (patientConsent.getPatient() != null) ? patientConsent.getPatient().getPseudo() : null;
+        String email = null;
+        if (pseudo != null) {
+            email = patientRepository.findOneByPseudo(pseudo)
+                .map(dev.sunusante.patient.domain.Patient::getEmail)
+                .orElse(null);
+        }
 
         notificationProducer.sendNotification(
-            patientConsent.getPatientPseudo(),
+            pseudo,
             email,
             "Un médecin a demandé l'accès à votre dossier médical. Veuillez valider la demande."
         );
@@ -153,7 +158,7 @@ public class PatientConsentService {
     public boolean hasActiveConsent(String patientPseudo, String doctorLogin) {
         log.debug("Request to check active consent for patient {} and doctor {}", patientPseudo, doctorLogin);
         return patientConsentRepository
-            .findFirstByPatientPseudoAndDoctorLoginAndStatusAndExpiryDateAfterOrderByConsentDateDesc(
+            .findFirstByPatient_PseudoAndDoctorLoginAndStatusAndExpiryDateAfterOrderByConsentDateDesc(
                 patientPseudo,
                 doctorLogin,
                 ConsentStatus.ACTIVE,

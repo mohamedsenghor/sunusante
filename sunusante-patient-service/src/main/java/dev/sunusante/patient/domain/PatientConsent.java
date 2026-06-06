@@ -1,5 +1,6 @@
 package dev.sunusante.patient.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.sunusante.patient.domain.enumeration.ConsentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -23,10 +24,6 @@ public class PatientConsent implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "patient_pseudo", nullable = false)
-    private String patientPseudo;
-
-    @NotNull
     @Column(name = "doctor_login", nullable = false)
     private String doctorLogin;
 
@@ -39,6 +36,10 @@ public class PatientConsent implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ConsentStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "guardians", "consents" }, allowSetters = true)
+    private Patient patient;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -53,19 +54,6 @@ public class PatientConsent implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPatientPseudo() {
-        return this.patientPseudo;
-    }
-
-    public PatientConsent patientPseudo(String patientPseudo) {
-        this.setPatientPseudo(patientPseudo);
-        return this;
-    }
-
-    public void setPatientPseudo(String patientPseudo) {
-        this.patientPseudo = patientPseudo;
     }
 
     public String getDoctorLogin() {
@@ -120,6 +108,19 @@ public class PatientConsent implements Serializable {
         this.status = status;
     }
 
+    public Patient getPatient() {
+        return this.patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public PatientConsent patient(Patient patient) {
+        this.setPatient(patient);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -144,7 +145,6 @@ public class PatientConsent implements Serializable {
     public String toString() {
         return "PatientConsent{" +
             "id=" + getId() +
-            ", patientPseudo='" + getPatientPseudo() + "'" +
             ", doctorLogin='" + getDoctorLogin() + "'" +
             ", consentDate='" + getConsentDate() + "'" +
             ", expiryDate='" + getExpiryDate() + "'" +

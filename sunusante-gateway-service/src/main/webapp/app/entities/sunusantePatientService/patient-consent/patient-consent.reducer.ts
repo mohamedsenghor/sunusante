@@ -66,16 +66,6 @@ export const partialUpdateEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const approveEntity = createAsyncThunk(
-  'patientConsent/approve_entity',
-  async (id: string | number, thunkAPI) => {
-    const result = await axios.post<IPatientConsent>(`${apiUrl}/${id}/approve`);
-    thunkAPI.dispatch(getEntities({}));
-    return result;
-  },
-  { serializeError: serializeAxiosError },
-);
-
 export const deleteEntity = createAsyncThunk(
   'patientConsent/delete_entity',
   async (id: string | number, thunkAPI) => {
@@ -113,7 +103,7 @@ export const PatientConsentSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity, approveEntity), (state, action) => {
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
@@ -124,7 +114,7 @@ export const PatientConsentSlice = createEntitySlice({
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, approveEntity, deleteEntity), state => {
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
