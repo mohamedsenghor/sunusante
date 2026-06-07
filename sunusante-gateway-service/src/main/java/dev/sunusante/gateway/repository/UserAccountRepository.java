@@ -28,8 +28,8 @@ public interface UserAccountRepository extends ReactiveCrudRepository<UserAccoun
     @Query("SELECT * FROM user_account entity WHERE entity.internal_user_id = :id")
     Flux<UserAccount> findByInternalUser(Long id);
 
-    @Query("SELECT * FROM user_account entity WHERE entity.internal_user_id IS NULL")
-    Flux<UserAccount> findAllWhereInternalUserIsNull();
+    @Query("SELECT * FROM user_account entity JOIN jhi_user u ON entity.internal_user_id = u.id WHERE u.login = :login")
+    Mono<UserAccount> findByInternalUserLogin(String login);
 
     @Override
     <S extends UserAccount> Mono<S> save(S entity);
