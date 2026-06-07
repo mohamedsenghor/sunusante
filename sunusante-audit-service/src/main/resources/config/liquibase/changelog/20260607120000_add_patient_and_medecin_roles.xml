@@ -1,0 +1,18 @@
+<!-- src/main/resources/config/liquibase/changelog/20260607120000_add_patient_and_medecin_roles.xml -->
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20260607120000-1" author="jhipster">
+        <insert tableName="jhi_authority">
+            <column name="name" value="ROLE_PATIENT"/>
+        </insert>
+        <insert tableName="jhi_authority">
+            <column name="name" value="ROLE_MEDECIN"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

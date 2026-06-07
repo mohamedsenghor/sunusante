@@ -17,6 +17,17 @@
 ---
 # Conditionally disable springdoc on missing api-docs profile
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mohamedsenghor05@gmail.com
+    password: wmpw ysen wszd uixp
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
   config:
     activate:
       on-profile: '!api-docs'
@@ -241,7 +252,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: sunusanteGatewayService@localhost
+    from: mohamedsenghor05@gmail.com
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
