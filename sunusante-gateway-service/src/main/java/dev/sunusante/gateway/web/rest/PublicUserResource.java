@@ -65,6 +65,20 @@ public class PublicUserResource {
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
 
+    /**
+     * {@code GET /users/:login/exists} : check if a user exists.
+     *
+     * @param login the login of the user.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body true if user exists, false otherwise.
+     */
+    @GetMapping("/users/{login}/exists")
+    public Mono<ResponseEntity<Boolean>> checkUserExists(@PathVariable String login) {
+        log.debug("REST request to check if user exists: {}", login);
+        return userService.getUserWithAuthoritiesByLogin(login)
+            .map(user -> ResponseEntity.ok(true))
+            .defaultIfEmpty(ResponseEntity.ok(false));
+    }
+
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }

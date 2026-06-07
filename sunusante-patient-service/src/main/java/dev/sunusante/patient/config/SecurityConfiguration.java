@@ -20,6 +20,8 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 
+import java.util.Random;
+
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
@@ -69,5 +71,10 @@ public class SecurityConfiguration {
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    Random random() {
+        return new Random();
     }
 }
