@@ -232,7 +232,12 @@ public class UserService {
     public Mono<Void> deleteUser(String login) {
         return userRepository
             .findOneByLogin(login)
-            .flatMap(user -> userRepository.delete(user).thenReturn(user))
+            .flatMap(user -> 
+                userAccountRepository.findByInternalUser(user.getId())
+                    .flatMap(userAccountRepository::delete)
+                    .then(userRepository.delete(user))
+                    .thenReturn(user)
+            )
             .doOnNext(user -> log.debug("Deleted User: {}", user))
             .then();
     }
