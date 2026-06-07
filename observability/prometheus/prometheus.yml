@@ -1,0 +1,41 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+
+  - job_name: 'sunusante-patient'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:9041']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'sunusante-patient'
+
+  - job_name: 'sunusante-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:9040']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'sunusante-gateway'
+
+  - job_name: 'sunusante-dmp'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:9042']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'sunusante-dmp'
+
+  - job_name: 'sunusante-audit'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:9043']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'sunusante-audit'
