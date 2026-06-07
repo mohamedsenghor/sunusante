@@ -3,7 +3,9 @@ package dev.sunusante.gateway.service;
 import dev.sunusante.gateway.config.Constants;
 import dev.sunusante.gateway.domain.Authority;
 import dev.sunusante.gateway.domain.User;
+import dev.sunusante.gateway.domain.UserAccount;
 import dev.sunusante.gateway.repository.AuthorityRepository;
+import dev.sunusante.gateway.repository.UserAccountRepository;
 import dev.sunusante.gateway.repository.UserRepository;
 import dev.sunusante.gateway.security.AuthoritiesConstants;
 import dev.sunusante.gateway.security.SecurityUtils;
@@ -39,11 +41,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final UserAccountRepository userAccountRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserAccountRepository userAccountRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userAccountRepository = userAccountRepository;
+    }
+
+    private Mono<User> ensureUserAccount(User user) {
+        return userAccountRepository.findByInternalUser(user.getId())
+            .next()
+            .switchIfEmpty(Mono.defer(() -> {
+                UserAccount account = new UserAccount();
+                account.setInternalUser(user);
+                return userAccountRepository.save(account);
+            }))
+            .thenReturn(user);
     }
 
     @Transactional
@@ -57,6 +72,7 @@ public class UserService {
                 user.setActivationKey(null);
                 return saveUser(user);
             })
+            .flatMap(this::ensureUserAccount)
             .doOnNext(user -> log.debug("Activated user: {}", user));
     }
 
@@ -73,7 +89,8 @@ public class UserService {
                 user.setResetDate(null);
                 return user;
             })
-            .flatMap(this::saveUser);
+            .flatMap(this::saveUser)
+            .flatMap(this::ensureUserAccount);
     }
 
     @Transactional
@@ -139,6 +156,7 @@ public class UserService {
                     .thenReturn(newUser)
                     .doOnNext(user -> user.setAuthorities(authorities))
                     .flatMap(this::saveUser)
+                    .flatMap(this::ensureUserAccount)
                     .doOnNext(user -> log.debug("Created Information for User: {}", user));
             });
     }
@@ -172,6 +190,7 @@ public class UserService {
                 return newUser;
             })
             .flatMap(this::saveUser)
+            .flatMap(this::ensureUserAccount)
             .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
     }
 

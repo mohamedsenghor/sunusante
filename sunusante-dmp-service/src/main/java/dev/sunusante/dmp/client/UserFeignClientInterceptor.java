@@ -1,18 +1,24 @@
 package dev.sunusante.dmp.client;
 
-import dev.sunusante.dmp.security.SecurityUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 public class UserFeignClientInterceptor implements RequestInterceptor {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER = "Bearer";
 
     @Override
     public void apply(RequestTemplate template) {
-        SecurityUtils.getCurrentUserJWT().ifPresent(s -> template.header(AUTHORIZATION_HEADER, String.format("%s %s", BEARER, s)));
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            String token = attributes.getRequest().getHeader(AUTHORIZATION_HEADER);
+            if (token != null) {
+                template.header(AUTHORIZATION_HEADER, token);
+            }
+        }
     }
 }
