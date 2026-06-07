@@ -77,6 +77,7 @@ public class PatientGatlingTest extends Simulation {
                                 ", \"pseudo\": \"SAMPLE_TEXT\"" +
                                 ", \"firstName\": \"SAMPLE_TEXT\"" +
                                 ", \"lastName\": \"SAMPLE_TEXT\"" +
+                                ", \"email\": \"SAMPLE_TEXT\"" +
                                 ", \"birthDate\": \"2020-01-01T00:00:00.000Z\"" +
                                 ", \"idType\": \"NIN\"" +
                                 ", \"idValue\": \"SAMPLE_TEXT\"" +

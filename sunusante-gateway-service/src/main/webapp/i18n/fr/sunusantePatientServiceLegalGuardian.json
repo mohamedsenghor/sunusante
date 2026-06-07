@@ -1,0 +1,33 @@
+{
+  "sunusanteGatewayServiceApp": {
+    "sunusantePatientServiceLegalGuardian": {
+      "home": {
+        "title": "LegalGuardians",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Legal Guardian",
+        "createOrEditLabel": "Créer ou éditer un Legal Guardian",
+        "notFound": "Aucun Legal Guardian trouvé"
+      },
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Legal Guardian {{ id }} ?"
+      },
+      "detail": {
+        "title": "Legal Guardian"
+      },
+      "id": "ID",
+      "guardianType": "Guardian Type",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "lastModifiedBy": "Last Modified By",
+      "lastModifiedDate": "Last Modified Date",
+      "dependent": "Dependent"
+    }
+  },
+  "sunusantePatientServiceApp": {
+    "sunusantePatientServiceLegalGuardian": {
+      "created": "Un nouveau Legal Guardian a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Legal Guardian avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Legal Guardian avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

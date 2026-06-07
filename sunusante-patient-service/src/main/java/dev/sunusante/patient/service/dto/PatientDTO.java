@@ -27,6 +27,8 @@ public class PatientDTO implements Serializable {
     @NotNull
     private String lastName;
 
+    private String email;
+
     @NotNull
     private LocalDate birthDate;
 
@@ -72,6 +74,14 @@ public class PatientDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDate getBirthDate() {
@@ -128,6 +138,7 @@ public class PatientDTO implements Serializable {
             ", pseudo='" + getPseudo() + "'" +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", email='" + getEmail() + "'" +
             ", birthDate='" + getBirthDate() + "'" +
             ", idType='" + getIdType() + "'" +
             ", idValue='" + getIdValue() + "'" +

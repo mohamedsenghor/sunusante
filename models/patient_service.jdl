@@ -8,9 +8,24 @@ entity Patient {
   pseudo String unique, // Pivot pour pseudonymisation, ID technique pour lier avec Dossier Medical
   firstName String required,
   lastName String required,
+  email String unique,
   birthDate LocalDate required,
   idType IdentifierType, // NIN, Acte Naissance, Provisoire, c'est la nature de l'identifiant du patient
   idValue String // Stocké chiffré, c'est la valeur d'identification réelle du patient
+}
+
+/**
+ * Consentement pour le partage de dossier médical
+ */
+entity PatientConsent {
+  doctorLogin String required,
+  consentDate Instant,
+  expiryDate Instant,
+  status ConsentStatus
+}
+
+enum ConsentStatus {
+  ACTIVE, EXPIRED, REVOKED, PENDING
 }
 
 entity LegalGuardian {
@@ -32,6 +47,7 @@ enum IdentifierType {
 
 relationship OneToMany {
   Patient{guardian} to LegalGuardian{dependent}
+  Patient{consent} to PatientConsent{patient}
 }
 
 dto * with mapstruct

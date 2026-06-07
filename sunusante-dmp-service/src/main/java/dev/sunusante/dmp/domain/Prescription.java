@@ -30,6 +30,7 @@ public class Prescription implements Serializable {
 
     @Lob
     @Column(name = "details")
+    @Convert(converter = dev.sunusante.dmp.util.MedicalDataConverter.class)
     private String details;
 
     @Column(name = "created_by")

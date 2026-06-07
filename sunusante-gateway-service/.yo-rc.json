@@ -15,7 +15,7 @@
     "enableHibernateCache": false,
     "enableSwaggerCodegen": true,
     "enableTranslation": true,
-    "entities": ["UserAccount"],
+    "entities": ["UserAccount", "Patient", "LegalGuardian", "PatientConsent"],
     "feignClient": null,
     "jhipsterVersion": "8.6.0",
     "jwtSecretKey": "MGVkZTU5YjIzN2NjNjc2OWVkYTkwYjljYWRkYjNhZTFlZjZiYzMxYTlhYTNmZmVmMjQ1MGUwODZkMjQ5YjdjNzFjNTM3MGVlNmI4MzIzMGJkYTNmN2UwMGRmZWY4NmNhZGZjYTg0ZDkwYzRiYjE5OWI0ZjYzZDdiZGVhOTM3NzM=",

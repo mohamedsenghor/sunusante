@@ -10,11 +10,25 @@ public class PatientTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static Patient getPatientSample1() {
-        return new Patient().id(1L).login("login1").pseudo("pseudo1").firstName("firstName1").lastName("lastName1").idValue("idValue1");
+        return new Patient()
+            .id(1L)
+            .login("login1")
+            .pseudo("pseudo1")
+            .firstName("firstName1")
+            .lastName("lastName1")
+            .email("email1")
+            .idValue("idValue1");
     }
 
     public static Patient getPatientSample2() {
-        return new Patient().id(2L).login("login2").pseudo("pseudo2").firstName("firstName2").lastName("lastName2").idValue("idValue2");
+        return new Patient()
+            .id(2L)
+            .login("login2")
+            .pseudo("pseudo2")
+            .firstName("firstName2")
+            .lastName("lastName2")
+            .email("email2")
+            .idValue("idValue2");
     }
 
     public static Patient getPatientRandomSampleGenerator() {
@@ -24,6 +38,7 @@ public class PatientTestSamples {
             .pseudo(UUID.randomUUID().toString())
             .firstName(UUID.randomUUID().toString())
             .lastName(UUID.randomUUID().toString())
+            .email(UUID.randomUUID().toString())
             .idValue(UUID.randomUUID().toString());
     }
 }

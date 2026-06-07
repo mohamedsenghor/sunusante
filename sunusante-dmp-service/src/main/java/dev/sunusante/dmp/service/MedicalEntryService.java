@@ -1,9 +1,15 @@
 package dev.sunusante.dmp.service;
 
+import dev.sunusante.dmp.broker.NotificationProducer;
+import dev.sunusante.dmp.client.AuditLogClient;
+import dev.sunusante.dmp.client.PatientClient;
+import dev.sunusante.dmp.client.PatientConsentClient;
 import dev.sunusante.dmp.domain.MedicalEntry;
 import dev.sunusante.dmp.repository.MedicalEntryRepository;
+import dev.sunusante.dmp.security.SecurityUtils;
 import dev.sunusante.dmp.service.dto.MedicalEntryDTO;
 import dev.sunusante.dmp.service.mapper.MedicalEntryMapper;
+import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +31,28 @@ public class MedicalEntryService {
 
     private final MedicalEntryMapper medicalEntryMapper;
 
-    public MedicalEntryService(MedicalEntryRepository medicalEntryRepository, MedicalEntryMapper medicalEntryMapper) {
+    private final PatientConsentClient patientConsentClient;
+
+    private final AuditLogClient auditLogClient;
+
+    private final NotificationProducer notificationProducer;
+
+    private final PatientClient patientClient;
+
+    public MedicalEntryService(
+        MedicalEntryRepository medicalEntryRepository,
+        MedicalEntryMapper medicalEntryMapper,
+        PatientConsentClient patientConsentClient,
+        AuditLogClient auditLogClient,
+        NotificationProducer notificationProducer,
+        PatientClient patientClient
+    ) {
         this.medicalEntryRepository = medicalEntryRepository;
         this.medicalEntryMapper = medicalEntryMapper;
+        this.patientConsentClient = patientConsentClient;
+        this.auditLogClient = auditLogClient;
+        this.notificationProducer = notificationProducer;
+        this.patientClient = patientClient;
     }
 
     /**
@@ -40,6 +65,17 @@ public class MedicalEntryService {
         log.debug("Request to save MedicalEntry : {}", medicalEntryDTO);
         MedicalEntry medicalEntry = medicalEntryMapper.toEntity(medicalEntryDTO);
         medicalEntry = medicalEntryRepository.save(medicalEntry);
+
+        String email = patientClient.getPatientByPseudo(medicalEntry.getPatientPseudo())
+            .map(PatientClient.PatientDTO::getEmail)
+            .orElse(null);
+
+        notificationProducer.sendNotification(
+            medicalEntry.getPatientPseudo(),
+            email,
+            "Une nouvelle entrée médicale a été ajoutée à votre dossier."
+        );
+
         return medicalEntryMapper.toDto(medicalEntry);
     }
 
@@ -97,7 +133,37 @@ public class MedicalEntryService {
     @Transactional(readOnly = true)
     public Optional<MedicalEntryDTO> findOne(Long id) {
         log.debug("Request to get MedicalEntry : {}", id);
-        return medicalEntryRepository.findById(id).map(medicalEntryMapper::toDto);
+        return medicalEntryRepository
+            .findById(id)
+            .map(medicalEntry -> {
+                String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse("anonymous");
+                boolean isCreator = currentUserLogin.equals(medicalEntry.getCreatedBy());
+                boolean hasConsent = true;
+
+                if (!isCreator && !currentUserLogin.equals("anonymous")) {
+                    Boolean result = patientConsentClient.checkActiveConsent(medicalEntry.getPatientPseudo(), currentUserLogin);
+                    hasConsent = Boolean.TRUE.equals(result);
+                }
+
+                // Create Audit Log
+                AuditLogClient.AuditLogDTO auditLog = new AuditLogClient.AuditLogDTO();
+                auditLog.setTimestamp(Instant.now());
+                auditLog.setPrincipal(currentUserLogin);
+                auditLog.setResourceId("MedicalEntry:" + id);
+                auditLog.setAction("VIEW");
+                auditLog.setIsSuccess(hasConsent);
+                try {
+                    auditLogClient.createAuditLog(auditLog);
+                } catch (Exception e) {
+                    log.error("Failed to send audit log", e);
+                }
+
+                if (!hasConsent && !isCreator) {
+                    throw new SecurityException("Access denied: No active consent for this patient record.");
+                }
+                return medicalEntry;
+            })
+            .map(medicalEntryMapper::toDto);
     }
 
     /**

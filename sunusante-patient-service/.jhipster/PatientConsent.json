@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20260604142926"
+  },
+  "applications": "*",
+  "clientRootFolder": "sunusantePatientService",
+  "databaseType": "sql",
+  "documentation": "Consentement pour le partage de dossier médical",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "doctorLogin",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "consentDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ConsentStatus",
+      "fieldValues": "ACTIVE,EXPIRED,REVOKED,PENDING"
+    }
+  ],
+  "microserviceName": "sunusantePatientService",
+  "name": "PatientConsent",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "patient",
+      "otherEntityRelationshipName": "consent",
+      "relationshipName": "patient",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

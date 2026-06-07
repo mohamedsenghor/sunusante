@@ -1,0 +1,19 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: sunusantedmpservice
+services:
+  postgresql:
+    extends:
+      file: ./postgresql.yml
+      service: postgresql
+  jhipster-registry:
+    extends:
+      file: ./jhipster-registry.yml
+      service: jhipster-registry
+  kafka:
+    extends:
+      file: ./kafka.yml
+      service: kafka
+  zookeeper:
+    extends:
+      file: ./kafka.yml
+      service: zookeeper

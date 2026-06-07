@@ -29,6 +29,11 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
       "fieldName": "birthDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
@@ -51,6 +56,13 @@
       "otherEntityName": "legalGuardian",
       "otherEntityRelationshipName": "dependent",
       "relationshipName": "guardian",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "patientConsent",
+      "otherEntityRelationshipName": "patient",
+      "relationshipName": "consent",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }

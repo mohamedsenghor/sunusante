@@ -1,6 +1,7 @@
 package dev.sunusante.patient.domain;
 
 import static dev.sunusante.patient.domain.LegalGuardianTestSamples.*;
+import static dev.sunusante.patient.domain.PatientConsentTestSamples.*;
 import static dev.sunusante.patient.domain.PatientTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,5 +46,27 @@ class PatientTest {
         patient.setGuardians(new HashSet<>());
         assertThat(patient.getGuardians()).doesNotContain(legalGuardianBack);
         assertThat(legalGuardianBack.getDependent()).isNull();
+    }
+
+    @Test
+    void consentTest() {
+        Patient patient = getPatientRandomSampleGenerator();
+        PatientConsent patientConsentBack = getPatientConsentRandomSampleGenerator();
+
+        patient.addConsent(patientConsentBack);
+        assertThat(patient.getConsents()).containsOnly(patientConsentBack);
+        assertThat(patientConsentBack.getPatient()).isEqualTo(patient);
+
+        patient.removeConsent(patientConsentBack);
+        assertThat(patient.getConsents()).doesNotContain(patientConsentBack);
+        assertThat(patientConsentBack.getPatient()).isNull();
+
+        patient.consents(new HashSet<>(Set.of(patientConsentBack)));
+        assertThat(patient.getConsents()).containsOnly(patientConsentBack);
+        assertThat(patientConsentBack.getPatient()).isEqualTo(patient);
+
+        patient.setConsents(new HashSet<>());
+        assertThat(patient.getConsents()).doesNotContain(patientConsentBack);
+        assertThat(patientConsentBack.getPatient()).isNull();
     }
 }

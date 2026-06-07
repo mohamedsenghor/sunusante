@@ -1,0 +1,2510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sécurité des SI — Approche Génie Logiciel & SSDLC</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/monokai.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --navy:       #060e20;
+      --navy-mid:   #0d1f3c;
+      --blue:       #1250a3;
+      --blue-light: #1e88e5;
+      --accent:     #00c8d4;
+      --accent2:    #3ddb85;
+      --warning:    #ffb830;
+      --danger:     #f04c6a;
+      --gold:       #ffd700;
+      --text:       #dde4f0;
+      --muted:      #7a90b0;
+    }
+
+    /* ── Base ── */
+    .reveal-viewport { background: var(--navy); }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      font-size: 26px;
+      color: var(--text);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-shadow: none;
+      margin-bottom: 0.4em;
+    }
+
+    .reveal h1 { font-size: 2.2em; line-height: 1.1; }
+    .reveal h2 { font-size: 1.4em; color: var(--accent); border-bottom: 2px solid rgba(0,200,212,.25); padding-bottom: .2em; }
+    .reveal h3 { font-size: 1em; font-weight: 600; }
+
+    .reveal .slides section { text-align: left; }
+
+    .reveal p   { margin: .4em 0; }
+
+    .reveal ul  { list-style: none; margin: 0; padding: 0; }
+    .reveal ul li {
+      padding: .15em 0 .15em 1.4em;
+      position: relative;
+    }
+    .reveal ul li::before {
+      content: '▸';
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+    }
+
+    pre { margin: 0 !important; }
+    .reveal pre code { max-height: 320px; font-size: .78em; }
+
+    /* ── Progress ── */
+    .reveal .progress { color: var(--accent); height: 4px; }
+
+    /* ── Patterns & helpers ── */
+    .card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 8px 0;
+    }
+    .card-l { border-left: 4px solid var(--accent); }
+    .card-danger  { border-left: 4px solid var(--danger);  background: rgba(240,76,106,.08); }
+    .card-success { border-left: 4px solid var(--accent2); background: rgba(61,219,133,.08); }
+    .card-warn    { border-left: 4px solid var(--warning); background: rgba(255,184,48,.08); }
+    .card-blue    { border-left: 4px solid var(--blue-light); background: rgba(30,136,229,.08); }
+
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: .55em;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .b-accent  { background: var(--accent);  color: var(--navy); }
+    .b-blue    { background: var(--blue);    color: #fff; }
+    .b-danger  { background: var(--danger);  color: #fff; }
+    .b-success { background: var(--accent2); color: var(--navy); }
+    .b-warn    { background: var(--warning); color: var(--navy); }
+    .b-gold    { background: var(--gold);    color: var(--navy); }
+
+    .stat-box {
+      text-align: center;
+      padding: 16px 10px;
+      background: rgba(255,255,255,.04);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .stat-num { font-size: 1.9em; font-weight: 900; color: var(--accent); display: block; }
+    .stat-lbl { font-size: .6em; color: var(--muted); margin-top: 4px; }
+
+    .hbox {
+      background: linear-gradient(135deg, rgba(0,200,212,.15), rgba(18,80,163,.15));
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+
+    .quote {
+      border-left: 4px solid var(--gold);
+      padding: 12px 18px;
+      background: rgba(255,215,0,.05);
+      font-style: italic;
+      color: #e0d0a8;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+    }
+
+    .tag { display: inline-block; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 2px 10px; font-size: .62em; margin: 2px; }
+
+    /* ── Section Cover ── */
+    .sec-cover {
+      background: linear-gradient(140deg, #060e20 0%, #0b2050 60%, #060e20 100%) !important;
+      overflow: hidden !important;
+    }
+    .sec-num {
+      position: absolute;
+      right: -10px; top: -20px;
+      font-size: 9em; font-weight: 900;
+      color: rgba(255,255,255,.04);
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ── Cover slide ── */
+    .main-cover {
+      background: radial-gradient(ellipse at 30% 50%, #0b2050 0%, #060e20 70%) !important;
+    }
+    .main-cover::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 80% 20%, rgba(0,200,212,.07) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(18,80,163,.1) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    /* ── CIA Triad ── */
+    .cia-wrap { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+    .cia-ring {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 12px;
+      font-weight: 700; font-size: .65em;
+    }
+    .cia-c { background: radial-gradient(#1565C0,#060e20); border: 3px solid #42a5f5; }
+    .cia-i { background: radial-gradient(#2E7D32,#060e20); border: 3px solid #66bb6a; }
+    .cia-a { background: radial-gradient(#E65100,#060e20); border: 3px solid #ffa726; }
+    .cia-ltr { font-size: 2.4em; font-weight: 900; line-height: 1; }
+
+    /* ── SSDLC Phase ── */
+    .phase {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 10px 14px; border-radius: 8px; margin: 6px 0;
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+    .phase-icon {
+      min-width: 34px; height: 34px;
+      border-radius: 8px; background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1em;
+    }
+    .phase-body h4 { margin: 0 0 3px 0; font-size: .78em; color: var(--accent); }
+    .phase-body p  { margin: 0; font-size: .62em; color: var(--muted); line-height: 1.4; }
+
+    /* ── Pipeline ── */
+    .pipeline {
+      display: flex; align-items: stretch; gap: 4px;
+      margin: 18px 0;
+    }
+    .pip {
+      flex: 1; text-align: center;
+      padding: 10px 4px; border-radius: 8px;
+      font-size: .52em; font-weight: 600; line-height: 1.3;
+    }
+    .pip-arr { display: flex; align-items: center; color: var(--accent); font-size: 1.1em; }
+
+    /* ── STRIDE Table ── */
+    .stride-table { width: 100%; border-collapse: collapse; font-size: .62em; }
+    .stride-table th { background: var(--blue); color: #fff; padding: 7px 10px; text-align: left; }
+    .stride-table td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .stride-table tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+
+    /* ── OWASP items ── */
+    .ow-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 6px 14px; border-radius: 7px; margin: 4px 0;
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.07);
+      font-size: .6em;
+    }
+    .ow-rank { font-size: 1.1em; font-weight: 900; color: var(--danger); min-width: 38px; }
+
+    /* ── Footer ── */
+    .footer-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 5px 28px;
+      background: rgba(18,80,163,.88);
+      backdrop-filter: blur(6px);
+      font-size: .45em; color: rgba(255,255,255,.75);
+      z-index: 200;
+    }
+
+    /* small utils */
+    .center { text-align: center !important; }
+    .mt10 { margin-top: 10px; }
+    .mt16 { margin-top: 16px; }
+    .f60 { font-size: .6em; }
+    .f65 { font-size: .65em; }
+    .bold { font-weight: 700; }
+    .c-accent { color: var(--accent); }
+    .c-warn   { color: var(--warning); }
+    .c-danger { color: var(--danger); }
+    .c-gold   { color: var(--gold); }
+    .c-ok     { color: var(--accent2); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 1 — COUVERTURE
+══════════════════════════════════════════════ -->
+<section class="main-cover center" data-background-color="#060e20">
+  <div style="padding-top:20px;">
+    <div class="badge b-accent" style="font-size:.45em; margin-bottom:18px;">ISI · 2025-2026</div>
+
+    <h1 style="font-size:2.6em; margin:0;
+      background: linear-gradient(135deg,#fff 30%,var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+      Sécurité des SI
+    </h1>
+
+    <h3 style="color:var(--muted); font-weight:400; margin:10px 0 28px;">
+      Approche Génie Logiciel · Security by Design · SSDLC
+    </h3>
+
+    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
+      <span class="badge b-accent">Sécurité Applicative</span>
+      <span class="badge b-blue">OWASP Top 10</span>
+      <span class="badge b-warn">DevSecOps</span>
+      <span class="badge b-success">SSDLC</span>
+      <span class="badge b-danger">Threat Modeling</span>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,.15); padding-top:18px;
+                font-size:.5em; color:var(--muted);">
+      <strong style="color:#fff; font-size:1.3em;">Moustapha SENE</strong><br>
+      killamo5@gmail.com
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 2 — PLAN DU COURS
+══════════════════════════════════════════════ -->
+<section>
+  <h2>Plan du cours</h2>
+  <div style="font-size:.62em;">
+    <div class="g2">
+      <div class="card card-l">
+        <strong class="c-accent">M1</strong> — Fondamentaux SSI &amp; Transformation numérique
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M2</strong> — Sécurité dans le SDLC — SSDLC
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M3</strong> — Vulnérabilités &amp; OWASP Top 10
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M4</strong> — DevSecOps &amp; Automatisation
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M5</strong> — Pratiques de Codage Sécurisé
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M6</strong> — Tests de sécurité &amp; Outils
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M7</strong> — Architectures modernes (API, Cloud, IAM)
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+      <div class="card card-l">
+        <strong class="c-accent">M8</strong> — Projet — Étude de cas
+        <span class="badge b-blue" style="float:right">3h</span>
+      </div>
+    </div>
+    <div class="card mt10" style="background:rgba(18,80,163,.2); border-color:var(--blue-light);">
+      <strong class="c-gold">M9</strong> — Évaluation finale — Démo · QCM/QRO · Soutenance
+      <span class="badge b-gold" style="float:right">6h</span>
+    </div>
+    <div class="mt10" style="text-align:center; color:var(--muted); font-size:.85em;">
+      Total : <strong style="color:#fff">30h</strong> · Cours magistral + TP + Projet
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 1 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M1</div>
+  <span class="badge b-accent" style="font-size:.45em;">Module 1 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Fondamentaux SSI
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    Transformation numérique · Enjeux · CIA · Coût qualité
+  </h3>
+  <div style="margin-top:20px; font-size:.55em; color:var(--muted);">
+    Pourquoi la sécurité est au cœur des projets numériques modernes
+  </div>
+</section>
+
+<!-- M1 — Contexte & Enjeux -->
+<section>
+  <h2>Contexte &amp; Enjeux</h2>
+  <div class="g2 f65">
+    <div>
+      <div class="card card-l">
+        <h3 class="c-accent" style="margin-top:0">Le logiciel est partout</h3>
+        <ul>
+          <li>Du bureau aux objets connectés (IoT)</li>
+          <li>Santé, Automobile, Finance, Industrie</li>
+          <li>Systèmes critiques à fort impact humain</li>
+          <li>Visibilité totale par les utilisateurs/clients</li>
+          <li>Systèmes de plus en plus complexes &amp; interconnectés</li>
+        </ul>
+      </div>
+      <div class="card card-warn mt10">
+        <h3 class="c-warn" style="margin-top:0">Nouveaux paradigmes</h3>
+        <ul>
+          <li>Cloud natif · Microservices · API-first</li>
+          <li>DevOps — livraisons continues (CI/CD)</li>
+          <li>Chaînes de dépendances tierces étendues</li>
+          <li>Équipes distribuées à l'échelle mondiale</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="g2" style="gap:10px;">
+        <div class="stat-box">
+          <span class="stat-num">82%</span>
+          <span class="stat-lbl">Des organisations ont subi une faille liée au code applicatif (CISA 2023)</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">4.5M$</span>
+          <span class="stat-lbl">Coût moyen d'une violation de données en 2023 (IBM)</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">30×</span>
+          <span class="stat-lbl">Coût d'un correctif en production vs en conception</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">95%</span>
+          <span class="stat-lbl">Des failles sont dues à des erreurs de code ou configuration (Gartner)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M1 — Triade CIA -->
+<section>
+  <h2>Définitions Clés — La Triade CIA</h2>
+  <div class="cia-wrap">
+    <div class="cia-ring cia-c">
+      <span class="cia-ltr">C</span>
+      <span style="margin-top:4px;">Confidentialité</span>
+      <small style="font-size:.75em; color:#90caf9; margin-top:4px;">Accès réservé aux personnes autorisées</small>
+    </div>
+    <div class="cia-ring cia-i">
+      <span class="cia-ltr">I</span>
+      <span style="margin-top:4px;">Intégrité</span>
+      <small style="font-size:.75em; color:#a5d6a7; margin-top:4px;">Données non altérées sans autorisation</small>
+    </div>
+    <div class="cia-ring cia-a">
+      <span class="cia-ltr">A</span>
+      <span style="margin-top:4px;">Disponibilité</span>
+      <small style="font-size:.75em; color:#ffcc80; margin-top:4px;">Système accessible quand nécessaire</small>
+    </div>
+  </div>
+  <div class="g2 f60 mt10">
+    <div class="card">
+      <strong class="c-accent">Menace</strong> — Cause potentielle d'un incident (attaquant, erreur humaine, catastrophe, malware…)
+    </div>
+    <div class="card">
+      <strong class="c-warn">Vulnérabilité</strong> — Faiblesse exploitable dans un système, une application ou un processus
+    </div>
+    <div class="card">
+      <strong class="c-danger">Risque</strong> = Menace × Vulnérabilité × Impact → probabilité × gravité
+    </div>
+    <div class="card">
+      <strong class="c-ok">Contrôle</strong> — Mesure technique ou organisationnelle réduisant un risque identifié
+    </div>
+  </div>
+  <div class="hbox f60 center mt10">
+    <strong class="c-gold">Système d'Information (SI)</strong> : ensemble organisé de ressources (matériels, logiciels, données, procédures, personnel) permettant de collecter, stocker, traiter et diffuser l'information.
+  </div>
+</section>
+
+<!-- M1 — Pourquoi la sécurité est cruciale -->
+<section>
+  <h2>Pourquoi la sécurité dans le développement est cruciale ?</h2>
+  <div class="quote">
+    "Dans le logiciel, la plupart des défauts proviennent du développeur. Si nous pouvons arrêter d'introduire des défauts au fur et à mesure, nous obtenons un logiciel bien meilleur." — Capers Jones
+  </div>
+  <div class="g3 f60 mt10">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0">Conséquences Business</h4>
+      <ul>
+        <li>Amendes réglementaires (RGPD, PCI-DSS)</li>
+        <li>Perte de clientèle &amp; churn</li>
+        <li>Arrêt d'activité (downtime)</li>
+        <li>Atteinte à la réputation durable</li>
+        <li>Sanctions pénales dirigeants</li>
+      </ul>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0">Conséquences Techniques</h4>
+      <ul>
+        <li>Fuite de données personnelles (PII)</li>
+        <li>Corruption / chiffrement données (ransomware)</li>
+        <li>Déni de service (DoS/DDoS)</li>
+        <li>Prise de contrôle système (RCE)</li>
+        <li>Supply chain compromise</li>
+      </ul>
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0">Bénéfices d'investir tôt</h4>
+      <ul>
+        <li>Réduction drastique des coûts</li>
+        <li>Conformité intégrée &amp; auditable</li>
+        <li>Confiance des utilisateurs</li>
+        <li>Time-to-market accéléré</li>
+        <li>Avantage concurrentiel</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- M1 — Coût des défauts -->
+<section>
+  <h2>Le Coût des Défauts — La Règle du 1-10-100</h2>
+  <div class="hbox center f65">
+    Un défaut coûte <strong class="c-gold">exponentiellement plus cher</strong> à corriger selon sa phase de découverte
+  </div>
+  <div style="display:flex; justify-content:space-between; margin:22px 0; gap:10px; align-items:center;" class="f60">
+    <div class="stat-box" style="flex:1;">
+      <span class="stat-num" style="color:var(--accent2);">1×</span>
+      <span class="stat-lbl">En phase de<br><strong>Conception</strong></span>
+    </div>
+    <div style="color:var(--accent); font-size:1.4em;">→</div>
+    <div class="stat-box" style="flex:1;">
+      <span class="stat-num" style="color:var(--warning);">10×</span>
+      <span class="stat-lbl">En phase de<br><strong>Développement</strong></span>
+    </div>
+    <div style="color:var(--accent); font-size:1.4em;">→</div>
+    <div class="stat-box" style="flex:1;">
+      <span class="stat-num" style="color:var(--danger);">100×</span>
+      <span class="stat-lbl">En<br><strong>Production</strong></span>
+    </div>
+  </div>
+  <div class="g2 f60">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0">Processus Pathologique</h4>
+      La dette technique s'accumule. Chaque correctif génère de nouveaux bugs. Le coût de maintenance dépasse le coût de développement initial.
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0">Processus Sain</h4>
+      Cycle <em>"concevoir → construire → livrer"</em> avec qualité et sécurité élevées. Coût maîtrisé sur toute la durée de vie du logiciel.
+    </div>
+  </div>
+  <div class="card f60 mt10 center">
+    <em>Source : NIST "Economic Impacts of Inadequate Infrastructure for Software Testing" · Capers Jones, 2011</em>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 2 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M2</div>
+  <span class="badge b-accent" style="font-size:.45em;">Module 2 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Sécurité dans le SDLC
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    SSDLC · Security by Design · Threat Modeling · Livrables
+  </h3>
+</section>
+
+<!-- M2 — SDLC vs SSDLC -->
+<section>
+  <h2>SDLC vs SSDLC — Changement de Paradigme</h2>
+  <div class="g2 f65">
+    <div>
+      <h3 class="c-warn">SDLC Traditionnel</h3>
+      <div class="card card-warn">
+        <ul>
+          <li>Sécurité ajoutée en fin de cycle</li>
+          <li>Tests de pénétration one-shot (avant release)</li>
+          <li>Équipe sécurité isolée des devs</li>
+          <li>Correctifs coûteux en production</li>
+          <li>Approche : <em>"construire, échouer, réparer"</em></li>
+          <li>Compliance comme formalité</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c-ok">SSDLC — Secure SDLC</h3>
+      <div class="card card-success">
+        <ul>
+          <li>Sécurité intégrée à <strong>chaque phase</strong></li>
+          <li>Threat modeling dès la conception</li>
+          <li>Collaboration DevSecOps continue</li>
+          <li>Correction précoce et moins coûteuse</li>
+          <li>Approche : <em>"concevoir, construire, livrer"</em></li>
+          <li>Compliance by design</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="hbox f65 center mt10">
+    <strong class="c-gold">Paradigme SSDLC :</strong> Intégrer la sécurité dès la naissance du projet — à chaque étape, jusqu'à la fin du cycle de vie.
+  </div>
+</section>
+
+<!-- M2 — Phases SSDLC -->
+<section>
+  <h2>Les Phases du SSDLC</h2>
+  <div style="font-size:.62em;">
+    <div class="phase">
+      <div class="phase-icon">📋</div>
+      <div class="phase-body">
+        <h4>1. Exigences (Requirements)</h4>
+        <p>Exigences de sécurité fonctionnelles &amp; non-fonctionnelles · Use cases d'abus (abuse cases) · Classification des données · Conformité réglementaire (RGPD, PCI-DSS, ISO 27001, SOC2) · Exigences financières &amp; de conformité</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-icon">🎨</div>
+      <div class="phase-body">
+        <h4>2. Conception (Design)</h4>
+        <p>Threat Modeling (STRIDE, PASTA, LINDDUN) · Architecture sécurité (fonctionnelle, applicative, technique) · Principes Security by Design · Diagrammes de flux de données (DFD) · Revue d'architecture sécurisée</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-icon">💻</div>
+      <div class="phase-body">
+        <h4>3. Implémentation (Coding)</h4>
+        <p>Standards de codage sécurisé (CERT, MISRA, OWASP ASVS) · Revue de code sécurité (peer review + SAST) · Gestion des secrets (Vault, env vars) · Dépendances sécurisées (SCA) · Validation des entrées</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-icon">🧪</div>
+      <div class="phase-body">
+        <h4>4. Tests (Testing)</h4>
+        <p>Analyse dynamique (DAST) · Tests de pénétration · Tests de régression sécurité · Fuzzing · Tests de charge &amp; résilience · Scans de vulnérabilités</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-icon">🚀</div>
+      <div class="phase-body">
+        <h4>5. Déploiement &amp; Maintenance</h4>
+        <p>Hardening de configuration · Gestion des patches · Surveillance continue (SIEM, IDS) · Plan de réponse aux incidents · Revue post-incident · Rotation des secrets</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M2 — Security by Design (9 principes) -->
+<section>
+  <h2>Security by Design — Les 9 Principes Fondamentaux</h2>
+  <div class="g3 f60">
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">① Moindre Privilège</h4>
+      Chaque composant n'accède qu'aux ressources strictement nécessaires à sa fonction. Ni plus, ni moins.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">② Défense en Profondeur</h4>
+      Plusieurs couches de contrôles indépendantes. Si une couche échoue, les autres protègent encore.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">③ Sécurité par Défaut</h4>
+      La configuration par défaut est la plus sécurisée. L'utilisateur active des fonctions, pas la sécurité.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">④ Fail Securely</h4>
+      En cas d'erreur, le système revient à un état sécurisé — refus d'accès par défaut, pas d'exposition.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">⑤ Ne jamais faire confiance aux entrées</h4>
+      Toute entrée externe (user, API, BDD, fichier) est potentiellement malveillante — valider &amp; assainir.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">⑥ Open Design</h4>
+      La sécurité ne repose pas sur le secret de la conception. Pas de <em>security through obscurity</em>.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">⑦ Réutilisation des Contrôles</h4>
+      Utiliser des librairies et frameworks sécurité éprouvés plutôt que de réinventer la roue.
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">⑧ Séparation des Privilèges</h4>
+      Plusieurs conditions doivent être réunies pour accéder à une ressource critique (double contrôle).
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">⑨ Logging &amp; Auditabilité</h4>
+      Journaliser les événements de sécurité significatifs pour la détection, la forensique et la conformité.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     M2 — CAS PRATIQUES SECURITY BY DESIGN
+══════════════════════════════════════════════ -->
+
+<!-- CAS PRATIQUES — Cover intermédiaire -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num" style="font-size:6em; right:0; top:-10px;">⚡</div>
+  <span class="badge b-warn" style="font-size:.45em;">Cas Pratiques</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Security by Design — En Pratique
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    Scénarios réels · Attaques · Solutions
+  </h3>
+  <div class="g3 f60" style="margin-top:24px; text-align:left;">
+    <div class="card card-danger"><span class="c-danger bold">Problème</span><br><span style="color:var(--muted)">Configuration vulnérable</span></div>
+    <div class="card card-warn"><span class="c-warn bold">Attaque</span><br><span style="color:var(--muted)">Exploitation réelle</span></div>
+    <div class="card card-success"><span class="c-ok bold">Solution</span><br><span style="color:var(--muted)">Bonne pratique appliquée</span></div>
+  </div>
+</section>
+
+<!-- CAS 1 — Moindre Privilège -->
+<section>
+  <h2>① Moindre Privilège — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Contexte :</strong> PayBuddy, une fintech, configure son application web avec un seul utilisateur BD qui a tous les droits.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0">Problème — Trop de droits</h4>
+      <p>L'application utilise l'utilisateur <code>db_admin</code> pour toutes les opérations — lecture <em>ET</em> écriture <em>ET</em> suppression.</p>
+      <pre style="margin-top:8px;"><code class="language-sql" style="font-size:.8em;">-- Utilisateur BD avec tous les droits
+GRANT SELECT, INSERT, UPDATE,
+      DELETE, DROP, CREATE
+  ON payments.* TO 'app_user';</code></pre>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Attaque — SQL Injection</h4>
+      <p>Un attaquant injecte une commande SQL via un champ de formulaire :</p>
+      <pre style="margin-top:8px;"><code class="language-sql" style="font-size:.8em;">-- Payload injecté dans un formulaire
+'; DROP TABLE payments; --
+
+-- Résultat : toute la table supprimée !
+-- L'app avait le droit DROP... donc ça marche.</code></pre>
+      <p style="color:var(--danger); font-weight:700; margin-top:8px;">→ Perte totale des données de paiement</p>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0">Solution — Principe du moindre privilège</h4>
+    <div class="g2">
+      <div>
+        <p>Créer des rôles distincts selon le besoin :</p>
+        <pre><code class="language-sql" style="font-size:.8em;">-- Lecture seule pour l'API publique
+GRANT SELECT ON payments.* TO 'api_user';
+-- Écriture uniquement pour le service de paiement
+GRANT INSERT, UPDATE ON payments.*
+  TO 'payment_svc';</code></pre>
+      </div>
+      <ul style="margin-top:4px;">
+        <li>Chaque service a son propre compte BD</li>
+        <li>Aucun service n'a les droits <code>DROP</code> ou <code>CREATE</code></li>
+        <li>Si une injection SQL réussit → aucun dommage structurel</li>
+        <li>Appliquer le même principe aux APIs, fichiers, secrets</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 2 — Data Protection -->
+<section>
+  <h2>② Protection des Données — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Contexte :</strong> PayBuddy expose une API de paiement. Les numéros de carte transitent en clair entre le client et le serveur.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Problème — Données en clair</h4>
+      <p>L'API tourne en <strong>HTTP</strong> (pas HTTPS). La réponse retourne le numéro complet :</p>
+      <pre style="margin-top:8px;"><code class="language-json" style="font-size:.8em;">// Réponse API — DANGEREUX
+{
+  "user": "John Doe",
+  "card": "4532 1234 5678 9420",
+  "cvv": "123",
+  "status": "confirmed"
+}</code></pre>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Attaque — Man-in-the-Middle</h4>
+      <p>Sur un réseau public (café, aéroport), un attaquant intercepte le trafic :</p>
+      <ul style="margin-top:8px;">
+        <li>Wireshark capture les paquets HTTP</li>
+        <li>Numéro de carte lu en clair</li>
+        <li>CVV disponible → fraude immédiate</li>
+        <li>Violation PCI-DSS → amendes lourdes</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — TLS + Masquage des données</h4>
+    <div class="g2">
+      <div>
+        <p><strong>Transport :</strong> HTTPS obligatoire (TLS 1.3)</p>
+        <pre><code class="language-json" style="font-size:.8em;">// Réponse API — SÉCURISÉ
+{
+  "user": "John Doe",
+  "card": "XXXXXXXXXXXX9420",
+  "status": "confirmed"
+}</code></pre>
+      </div>
+      <ul style="margin-top:4px;">
+        <li>TLS chiffre le transport → interception inutile</li>
+        <li>Masquer les données sensibles dans les réponses</li>
+        <li>Ne jamais stocker les CVV (interdit PCI-DSS)</li>
+        <li>Chiffrer les numéros de carte au repos (AES-256)</li>
+        <li>Tokeniser avec des vault de paiement (Stripe, Braintree)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 3 — Défense en Profondeur -->
+<section>
+  <h2>② Défense en Profondeur — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Principe :</strong> Plusieurs couches de sécurité indépendantes — si une couche tombe, les autres résistent encore.
+  </div>
+  <div class="f60">
+    <div style="display:grid; grid-template-columns:40px 1fr; gap:6px 12px; align-items:center;">
+      <div class="badge b-danger" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">7</div>
+      <div class="card card-danger" style="margin:0; padding:8px 14px;"> <strong>Périmètre réseau (Border)</strong> — Firewall périmétrique, IDS/IPS, filtrage BGP</div>
+      <div class="badge b-danger" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">6</div>
+      <div class="card card-warn" style="margin:0; padding:8px 14px;"> <strong>Accès physique</strong> — Badge RFID, caméras, salle serveurs verrouillée</div>
+      <div class="badge b-warn" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">5</div>
+      <div class="card card-warn" style="margin:0; padding:8px 14px;"> <strong>Firewall applicatif (WAF)</strong> — Bloque SQLi, XSS, CSRF au niveau HTTP</div>
+      <div class="badge b-warn" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">4</div>
+      <div class="card" style="margin:0; padding:8px 14px; border-left:4px solid var(--blue-light);"> <strong>Segmentation réseau</strong> — VLAN, zones DMZ, microsegmentation</div>
+      <div class="badge b-blue" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">3</div>
+      <div class="card" style="margin:0; padding:8px 14px; border-left:4px solid var(--blue-light);"> <strong>Hôtes patchés</strong> — OS/libs à jour, hardening CIS, antivirus EDR</div>
+      <div class="badge b-success" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">2</div>
+      <div class="card card-success" style="margin:0; padding:8px 14px;"> <strong>Validation des entrées</strong> — Validation, sanitisation, paramètres préparés</div>
+      <div class="badge b-success" style="text-align:center; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:.9em;">1</div>
+      <div class="card card-success" style="margin:0; padding:8px 14px;"> <strong>BD chiffrée</strong> — Chiffrement au repos (AES-256), accès minimal, audit trail</div>
+    </div>
+  </div>
+  <div class="card f60 center mt10" style="border-color:var(--gold);">
+    <strong class="c-gold">Règle d'or :</strong> Un attaquant qui franchit la couche 7 rencontre encore 6 obstacles. Chaque couche ralentit, détecte et limite l'impact.
+  </div>
+</section>
+
+<!-- CAS 4 — Logging -->
+<section>
+  <h2>⑨ Logging — Les 2 Pièges Opposés</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Paradoxe :</strong> Trop peu de logs = attaque invisible. Trop de logs (avec données sensibles) = violation RGPD.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Piège 1 — Logs vides</h4>
+      <p>Un attaquant tente 10 000 mots de passe sur un compte (<em>brute force</em>). Les logs ne tracent rien :</p>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.8em;"># Fichier auth.log — VIDE
+# Aucune trace des 10 000 tentatives
+# L'attaque n'est jamais détectée
+# Le compte est compromis après 3h</code></pre>
+      <p style="color:var(--danger); margin-top:6px; font-weight:700;">→ Intrusion non détectée pendant des semaines</p>
+    </div>
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Piège 2 — Trop d'infos dans les logs</h4>
+      <p>L'application logue tout, y compris les données sensibles :</p>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.8em;"># auth.log — DANGEREUX
+[INFO] Login attempt: user=john
+  password=MyP@ssw0rd123
+  card=4532123456789420
+  ip=192.168.1.10</code></pre>
+      <p style="color:var(--danger); margin-top:6px; font-weight:700;">→ Violation RGPD · Exposition si log volé</p>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — Logs utiles sans données sensibles</h4>
+    <div class="g2">
+      <pre><code class="language-bash" style="font-size:.75em;"># auth.log — CORRECT
+[WARN] Failed login: user=john
+  attempt=3/5 ip=192.168.1.10
+  timestamp=2024-01-15T14:23:01Z
+[ALERT] Account locked: user=john
+  reason=max_attempts_exceeded</code></pre>
+      <ul style="margin-top:4px;">
+        <li>Logguer les <em>événements</em>, jamais les <em>secrets</em></li>
+        <li>Détecter le brute force (seuil d'alertes)</li>
+        <li>Jamais : mots de passe, tokens, cartes, clés</li>
+        <li>Horodater et centraliser (SIEM)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 5 — Secure by Default -->
+<section>
+  <h2>③ Sécurité par Défaut — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Contexte :</strong> Une application de gestion d'équipe est livrée avec une politique de mots de passe trop permissive par défaut.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Configuration par défaut — Dangereuse</h4>
+      <p>Paramètres de sécurité du mot de passe dans <code>config.yml</code> :</p>
+      <pre style="margin-top:8px;"><code class="language-yaml" style="font-size:.8em;">password_policy:
+  min_length: 6          # Trop court !
+  require_uppercase: 0   # Non requis
+  require_numbers: 0     # Non requis
+  require_symbols: 0     # Non requis
+  max_attempts: 0        # Illimité !</code></pre>
+      <p style="color:var(--danger); font-weight:700; margin-top:6px;">→ Mots de passe comme <code>abc123</code> acceptés</p>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Attaque — Brute Force réussie</h4>
+      <ul style="margin-top:8px;">
+        <li>Dictionnaire des 1 000 mots de passe les plus communs</li>
+        <li>Aucune limite de tentatives → script automatisé</li>
+        <li>Mot de passe <code>password</code> trouvé en <strong>3 secondes</strong></li>
+        <li>Accès admin obtenu → données de toute l'équipe exposées</li>
+        <li>L'admin n'a jamais changé le mot de passe par défaut</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — Politique sécurisée par défaut</h4>
+    <div class="g2">
+      <pre><code class="language-yaml" style="font-size:.8em;">password_policy:
+  min_length: 12         # ≥ 12 caractères
+  require_uppercase: 1   # Obligatoire
+  require_numbers: 1     # Obligatoire
+  require_symbols: 1     # Obligatoire
+  max_attempts: 5        # Verrouillage
+  lockout_duration: 15m  # 15 min</code></pre>
+      <ul style="margin-top:4px;">
+        <li>La config la plus sécurisée est <strong>la config par défaut</strong></li>
+        <li>L'admin doit <em>réduire</em> la sécurité intentionnellement</li>
+        <li>Forcer le changement du mot de passe initial</li>
+        <li>Activer MFA par défaut pour les comptes admin</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 6 — Robust Error Checking -->
+<section>
+  <h2>Gestion Robuste des Erreurs — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Contexte :</strong> Une API expose une stack trace complète lors d'une erreur — un cadeau pour un attaquant.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Erreur avec Stack Trace exposée</h4>
+      <p>Requête : <code>GET /api/user?id=abc</code></p>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.78em;">HTTP 500 Internal Server Error
+java.sql.SQLException: Invalid column type
+  at org.hibernate.type.IntegerType.get
+     (IntegerType.java:44)
+  at com.paybuddy.dao.UserDAO.findById
+     (UserDAO.java:87)
+  Connection: jdbc:mysql://db-prod:3306/users
+  Framework: Spring Boot 2.7.1 (Tomcat 9.0)</code></pre>
+      <p style="color:var(--danger); font-weight:700; margin-top:6px;">→ Framework, version, host BD, structure du code… tout est révélé !</p>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Ce que l'attaquant apprend</h4>
+      <ul style="margin-top:8px;">
+        <li><strong>Spring Boot 2.7.1</strong> → CVE connues à cibler</li>
+        <li><strong>Hibernate ORM</strong> → vecteur d'injection HQL</li>
+        <li><strong>MySQL sur db-prod:3306</strong> → topologie réseau</li>
+        <li><strong>UserDAO.java:87</strong> → logique métier exposée</li>
+        <li>Cartographie complète de la stack technique en 1 requête</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — Erreurs génériques + logs internes</h4>
+    <div class="g2">
+      <pre><code class="language-json" style="font-size:.78em;">// Réponse API — SÉCURISÉ
+HTTP 500
+{
+  "error": "Une erreur est survenue.",
+  "code": "ERR_500",
+  "ref": "ERR-2024-001547"
+}
+// Logs INTERNES (jamais exposés)
+ERROR [UserDAO] id=abc invalid type
+  trace: ...stack complète ici...</code></pre>
+      <ul style="margin-top:4px;">
+        <li>Réponse publique : message générique + code de référence</li>
+        <li>Stack trace uniquement dans les logs internes</li>
+        <li>Désactiver le debug mode en production</li>
+        <li>Gérer toutes les exceptions (ne pas laisser propager)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 7 — Open Design / Security by Obscurity -->
+<section>
+  <h2>⑥ Open Design — Éviter la Sécurité par l'Obscurité</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Idée reçue :</strong> "Si je change le port SSH de 22 à 6666, personne ne le trouvera."
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Fausse sécurité — Port inhabituel</h4>
+      <p>Configuration du serveur SSH :</p>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.8em;"># /etc/ssh/sshd_config
+Port 6666                    # "Port secret"
+PasswordAuthentication yes   # Mot de passe autorisé
+# Mot de passe root : "dragon"</code></pre>
+      <p style="color:var(--muted); margin-top:6px;">Le responsable IT pense que personne ne cherchera sur ce port.</p>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Attaque — Nmap révèle tout</h4>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.8em;"># Scan complet de tous les ports
+$ nmap -p 1-65535 192.168.1.10
+
+PORT     STATE  SERVICE
+22/tcp   closed ssh
+6666/tcp open   ssh   # Trouvé en 30 sec !
+# OpenSSH 8.2 → CVE connues
+# Brute force avec "dragon" → accès root</code></pre>
+      <p style="color:var(--danger); font-weight:700; margin-top:6px;">→ Nmap scan tous les 65 535 ports en moins d'une minute</p>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — Sécurité réelle, pas par l'obscurité</h4>
+    <div class="g2">
+      <pre><code class="language-bash" style="font-size:.8em;"># /etc/ssh/sshd_config — SÉCURISÉ
+Port 22                         # Port standard OK
+PasswordAuthentication no       # Clés SSH uniquement
+PermitRootLogin no              # Jamais root direct
+AllowUsers deploy@10.0.0.0/24  # Whitelist IP
+MaxAuthTries 3</code></pre>
+      <ul style="margin-top:4px;">
+        <li>Désactiver l'auth par mot de passe → clés SSH uniquement</li>
+        <li>Principe d'Open Design : la sécurité résiste même si la config est connue</li>
+        <li>Ajouter un fail2ban, VPN, ou bastion host</li>
+        <li>Le port inhabituel <strong>n'est pas une défense</strong> — c'est de l'obscurantisme</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 8 — Réutilisation des Contrôles (Session ID prévisible) -->
+<section>
+  <h2>⑦ Réutilisation des Contrôles — Session Prévisible</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Contexte :</strong> Une équipe développe son propre mécanisme de session au lieu d'utiliser un framework éprouvé.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Session ID maison — Prévisible</h4>
+      <p>Le développeur génère un identifiant de session "unique" :</p>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.8em;">// SessionGenerator.java — DANGEREUX
+String sessionId = user.getInitials()
+  + dateFormat("ddMMyyyy");
+
+// John Doe se connecte le 23/11/2018
+// sessionId = "JD23112018"</code></pre>
+      <p style="color:var(--danger); font-weight:700; margin-top:6px;">→ Identifiant totalement prévisible !</p>
+    </div>
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0"> Attaque — Session Hijacking</h4>
+      <p>L'attaquant connaît le nom de la victime et la date de connexion :</p>
+      <pre style="margin-top:8px;"><code class="language-bash" style="font-size:.8em;"># L'attaquant sait que John Doe
+# s'est connecté aujourd'hui :
+# sessionId = "JD" + today() = "JD23112018"
+
+curl -H "Cookie: sessionId=JD23112018" \
+     https://app.example.com/dashboard
+# → Accès au compte de John Doe !</code></pre>
+    </div>
+  </div>
+  <div class="card card-success f60">
+    <h4 class="c-ok" style="margin-top:0"> Solution — Utiliser les contrôles éprouvés</h4>
+    <div class="g2">
+      <pre><code class="language-java" style="font-size:.8em;">// SÉCURISÉ — UUID cryptographiquement sûr
+// Utiliser le framework (Spring Security,
+// Express-session, Django sessions…)
+String sessionId = UUID.randomUUID()
+  .toString(); // "a3f9e2b1-7c4d-..."
+
+// Ou mieux : JWT signé
+String token = Jwts.builder()
+  .setSubject(user.getId())
+  .setExpiration(new Date(now + 3600000))
+  .signWith(secretKey).compact();</code></pre>
+      <ul style="margin-top:4px;">
+        <li>Ne jamais implémenter ses propres mécanismes d'auth/session</li>
+        <li>Utiliser des générateurs cryptographiquement sûrs (<code>SecureRandom</code>)</li>
+        <li>Session ID = au moins 128 bits d'entropie</li>
+        <li>Renouveler le token après connexion (Session Fixation)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 9 — Fail Securely -->
+<section>
+  <h2>④ Fail Securely — Cas Pratique</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Principe :</strong> Quand quelque chose échoue, le système doit se replier sur un état sécurisé — jamais sur un état ouvert par défaut.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Fail Open — Dangereux</h4>
+      <p>Le service d'authentification est temporairement indisponible :</p>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.8em;">// DANGEREUX — Fail Open
+boolean isAuthorized = false;
+try {
+  isAuthorized = authService.check(user);
+} catch (ServiceUnavailableException e) {
+  // Auth service down ? On laisse passer !
+  isAuthorized = true; // ← CATASTROPHIQUE
+  log.warn("Auth service down, allowing...");
+}
+if (isAuthorized) grantAccess();</code></pre>
+      <p style="color:var(--danger); font-weight:700;">→ Panne = accès libre à tous !</p>
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0"> Fail Secure — Refus par défaut</h4>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.8em;">// SÉCURISÉ — Fail Secure
+boolean isAuthorized = false; // défaut = refus
+try {
+  isAuthorized = authService.check(user);
+} catch (ServiceUnavailableException e) {
+  // Auth service down ? On refuse l'accès.
+  log.error("Auth service unavailable");
+  throw new AccessDeniedException(
+    "Service temporairement indisponible");
+}
+if (isAuthorized) grantAccess();</code></pre>
+    </div>
+  </div>
+  <div class="card card-warn f60">
+    <h4 class="c-warn" style="margin-top:0">️ Autres exemples Fail Secure</h4>
+    <div class="g3">
+      <div> <strong>Firewall en panne</strong><br>→ Bloquer tout le trafic, pas l'autoriser</div>
+      <div> <strong>Service d'autorisation down</strong><br>→ Refuser l'accès, pas l'accorder</div>
+      <div> <strong>Validation échoue</strong><br>→ Rejeter la donnée, jamais la laisser passer</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAS 10 — Trust No Input -->
+<section>
+  <h2>⑤ Ne Jamais Faire Confiance aux Entrées — Injection SQL</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Règle fondamentale :</strong> Toute entrée venant de l'extérieur (utilisateur, API, base de données, fichier) est <em>potentiellement malveillante</em>.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0"> Concaténation directe — Injection SQL</h4>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.8em;">// DANGEREUX — Concaténation
+String query = "SELECT * FROM users "
+  + "WHERE username = '" + username + "'";
+
+// Entrée attaquant :
+// username = "admin' OR '1'='1"
+
+// Requête générée :
+// SELECT * FROM users
+// WHERE username = 'admin' OR '1'='1'
+// → Retourne TOUS les utilisateurs !</code></pre>
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0"> Requête préparée — Paramétrisée</h4>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.8em;">// SÉCURISÉ — PreparedStatement
+PreparedStatement ps = conn.prepareStatement(
+  "SELECT * FROM users WHERE username = ?");
+ps.setString(1, username);
+// Le driver JDBC échappe automatiquement
+// Même si username = "admin' OR '1'='1"
+// → Cherche littéralement ce nom d'utilisateur
+
+// Spring Data JPA (encore mieux)
+@Query("SELECT u FROM User u
+        WHERE u.username = :name")
+User findByUsername(@Param("name") String name);</code></pre>
+    </div>
+  </div>
+  <div class="card f60">
+    <h4 class="c-accent" style="margin-top:0">Règles de validation des entrées</h4>
+    <div class="g3">
+      <div><strong class="c-ok">Whitelist</strong><br>Définir ce qui est autorisé, pas ce qui est interdit</div>
+      <div><strong class="c-warn">Sanitiser</strong><br>Encoder la sortie selon le contexte (HTML, SQL, Shell)</div>
+      <div><strong class="c-danger">Jamais confiance</strong><br>Même les données issues de la BD doivent être validées</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAS — Échappement & Assainissement -->
+<section>
+  <h2>Échappement &amp; Assainissement — Principes</h2>
+  <div class="hbox f65" style="margin-bottom:10px;">
+    <strong class="c-gold">Distinction clé :</strong>
+    <strong class="c-danger"> Sanitiser</strong> = nettoyer/supprimer les données dangereuses <em>en entrée</em>.
+    <strong class="c-ok"> Échapper</strong> = neutraliser les caractères spéciaux <em>en sortie</em>, selon le contexte.
+  </div>
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">🧹 Assainissement (Sanitisation)</h4>
+      <p>Nettoyer les données <strong>avant de les traiter</strong> : supprimer ou remplacer les caractères indésirables.</p>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.78em;">// Supprimer les balises HTML d'une entrée utilisateur
+// Bibliothèque : OWASP Java HTML Sanitizer
+String safe = HtmlPolicyBuilder
+  .allowElements("b", "i", "p")  // whitelist
+  .allowUrlProtocols("https")
+  .toFactory()
+  .sanitize(userInput);
+
+// Input  : &lt;script&gt;alert('xss')&lt;/script&gt;Bonjour
+// Output : Bonjour  (balise &lt;script&gt; supprimée)</code></pre>
+      <ul style="margin-top:8px;">
+        <li>Supprimer les balises <code>&lt;script&gt;</code>, <code>onclick</code>, <code>onerror</code>…</li>
+        <li>Utiliser une <strong>whitelist</strong> (ce qui est permis), pas une blacklist</li>
+        <li>Valider le format : email, téléphone, URL, nombre…</li>
+      </ul>
+    </div>
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">🔐 Échappement (Encoding)</h4>
+      <p>Transformer les caractères spéciaux <strong>avant de les afficher/utiliser</strong>, selon le contexte de destination.</p>
+      <pre style="margin-top:8px;"><code class="language-java" style="font-size:.78em;">// Contexte HTML — OWASP Java Encoder
+String html = Encode.forHtml(userInput);
+// &lt; → &amp;lt;   &gt; → &amp;gt;   " → &amp;quot;
+// &lt;script&gt; → &amp;lt;script&amp;gt; (inoffensif)
+
+// Contexte SQL → PreparedStatement (jamais concat)
+// Contexte JavaScript
+String js = Encode.forJavaScript(userInput);
+// Contexte URL
+String url = Encode.forUriComponent(userInput);</code></pre>
+      <ul style="margin-top:8px;">
+        <li>L'échappement dépend du <strong>contexte de sortie</strong></li>
+        <li>HTML ≠ JavaScript ≠ SQL ≠ Shell ≠ URL</li>
+        <li>Utiliser les fonctions des frameworks (pas du code maison)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="f60">
+    <h4 class="c-accent" style="margin:0 0 8px 0;">Contextes d'échappement — Tableau récapitulatif</h4>
+    <table class="stride-table">
+      <thead>
+        <tr>
+          <th>Contexte</th>
+          <th>Caractères dangereux</th>
+          <th>Transformation</th>
+          <th>Outil recommandé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong class="c-accent">HTML</strong></td>
+          <td><code>&lt; &gt; " ' &amp;</code></td>
+          <td><code>&amp;lt; &amp;gt; &amp;quot; &amp;#x27; &amp;amp;</code></td>
+          <td class="c-ok">OWASP Encoder / Thymeleaf auto</td>
+        </tr>
+        <tr>
+          <td><strong class="c-accent">SQL</strong></td>
+          <td><code>' " ; --</code></td>
+          <td>Paramètre lié (pas concaténé)</td>
+          <td class="c-ok">PreparedStatement / ORM</td>
+        </tr>
+        <tr>
+          <td><strong class="c-accent">JavaScript</strong></td>
+          <td><code>&lt;/script&gt; \ ' "</code></td>
+          <td>Séquences <code>\uXXXX</code></td>
+          <td class="c-ok">Encode.forJavaScript()</td>
+        </tr>
+        <tr>
+          <td><strong class="c-accent">URL</strong></td>
+          <td><code>espaces &amp; = ? #</code></td>
+          <td>Encodage <code>%XX</code></td>
+          <td class="c-ok">URLEncoder / encodeURIComponent</td>
+        </tr>
+        <tr>
+          <td><strong class="c-accent">Shell</strong></td>
+          <td><code>; | &amp; ` $ ( )</code></td>
+          <td>Éviter tout appel shell avec input user</td>
+          <td class="c-ok">ProcessBuilder (sans shell)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Sanitisation vs Échappement — Flux Complet</h2>
+  <div class="hbox f65" style="margin-bottom:12px;">
+    <strong class="c-gold">Règle d'or :</strong> Sanitiser à l'<strong>entrée</strong> · Valider le format · Échapper à la <strong>sortie</strong> selon le contexte. Les deux sont complémentaires, jamais alternatifs.
+  </div>
+  <div class="f60" style="margin-bottom:12px;">
+    <!-- Flux visuel -->
+    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      <div class="card card-danger" style="flex:1; min-width:120px; text-align:center; padding:10px 8px;">
+        <div style="font-size:1.4em;">👤</div>
+        <strong class="c-danger">Entrée utilisateur</strong><br>
+        <span style="color:var(--muted);">Données non fiables</span>
+      </div>
+      <div class="pip-arr">→</div>
+      <div class="card card-warn" style="flex:1.2; min-width:140px; text-align:center; padding:10px 8px;">
+        <div style="font-size:1.4em;">🧹</div>
+        <strong class="c-warn">1. Sanitiser</strong><br>
+        <span style="color:var(--muted);">Supprimer <code>&lt;script&gt;</code>, null bytes, balises interdites</span>
+      </div>
+      <div class="pip-arr">→</div>
+      <div class="card card-blue" style="flex:1.2; min-width:140px; text-align:center; padding:10px 8px;">
+        <div style="font-size:1.4em;">✔️</div>
+        <strong style="color:var(--blue-light);">2. Valider</strong><br>
+        <span style="color:var(--muted);">Format, type, longueur, whitelist</span>
+      </div>
+      <div class="pip-arr">→</div>
+      <div class="card" style="flex:1.2; min-width:140px; text-align:center; padding:10px 8px; border-left:4px solid var(--muted);">
+        <div style="font-size:1.4em;">💾</div>
+        <strong>3. Stocker</strong><br>
+        <span style="color:var(--muted);">BD, cache, fichier — données "propres"</span>
+      </div>
+      <div class="pip-arr">→</div>
+      <div class="card card-success" style="flex:1.2; min-width:140px; text-align:center; padding:10px 8px;">
+        <div style="font-size:1.4em;">🔐</div>
+        <strong class="c-ok">4. Échapper</strong><br>
+        <span style="color:var(--muted);">Selon le contexte de sortie : HTML, SQL, JS…</span>
+      </div>
+    </div>
+  </div>
+  <div class="g2 f60">
+    <div class="card card-danger">
+      <h4 class="c-danger" style="margin-top:0">❌ Anti-pattern courant — XSS Stocké</h4>
+      <pre><code class="language-java" style="font-size:.78em;">// Commentaire utilisateur stocké sans sanitisation :
+// input = &lt;img src=x onerror="steal(document.cookie)"&gt;
+// → Stocké tel quel en BD
+// → Affiché tel quel dans la page HTML
+// → Exécuté dans le navigateur de CHAQUE visiteur !</code></pre>
+      <p style="color:var(--danger); font-weight:700;">→ Vol de session de tous les utilisateurs</p>
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0">✅ Pattern correct</h4>
+      <pre><code class="language-java" style="font-size:.78em;">// 1. Sanitiser en entrée (supprimer balises dangereuses)
+String clean = sanitizer.sanitize(input);
+// 2. Stocker la version nettoyée
+commentRepo.save(new Comment(clean));
+// 3. Échapper en sortie (Thymeleaf le fait auto)
+// &lt;p th:text="${comment.text}"&gt;&lt;/p&gt;
+// th:text échappe automatiquement → &amp;lt;img...&amp;gt;
+// Affiché comme texte, jamais exécuté</code></pre>
+    </div>
+  </div>
+  <div class="card card-warn f60 mt10">
+    <strong class="c-warn">⚠️ Piège :</strong> Sanitiser à l'entrée <em>ne suffit pas</em> — si vous concaténez dans du SQL ou du HTML sans échapper, vous restez vulnérable. Les deux étapes sont <strong>indépendantes et toutes deux nécessaires</strong>.
+  </div>
+</section>
+
+<!-- CAS DÉBUTANT — Livre d'or / XSS -->
+<section>
+  <h2>🎓 Cas Débutant — Le Livre d'Or Piraté</h2>
+  <div class="hbox f65" style="margin-bottom:12px;">
+    <strong class="c-gold">Scénario :</strong> Un lycée crée un livre d'or en ligne. Les élèves peuvent laisser un message visible par tous les visiteurs. Pas de sanitisation, pas d'échappement.
+  </div>
+
+  <!-- Étape 1 : utilisation normale -->
+  <div class="f60" style="margin-bottom:10px;">
+    <div style="display:grid; grid-template-columns:1fr 40px 1fr; gap:8px; align-items:center;">
+
+      <div class="card card-success">
+        <h4 class="c-ok" style="margin-top:0">👩‍🎓 Élève normale — Utilisation prévue</h4>
+        <p>Marie tape dans le formulaire :</p>
+        <div class="card" style="background:rgba(255,255,255,.06); margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:.9em; padding:10px;">
+          Félicitations à toute l'équipe !
+        </div>
+        <p style="margin-top:8px; color:var(--muted);">→ La page affiche :</p>
+        <div class="card card-success" style="margin-top:4px; font-size:.9em; padding:8px;">
+          Félicitations à toute l'équipe !
+        </div>
+        <p class="c-ok" style="margin-top:6px;">✅ Tout va bien.</p>
+      </div>
+
+      <div style="text-align:center; font-size:1.8em; color:var(--muted);">VS</div>
+
+      <div class="card card-danger">
+        <h4 class="c-danger" style="margin-top:0">😈 Attaquant — Ce qu'il tape vraiment</h4>
+        <p>Kevin tape dans le <em>même</em> formulaire :</p>
+        <div class="card" style="background:rgba(240,76,106,.1); margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:.82em; padding:10px; color:var(--danger);">
+          &lt;script&gt;alert('Vous êtes piraté !')&lt;/script&gt;
+        </div>
+        <p style="margin-top:8px; color:var(--muted);">→ La page affiche pour <strong>chaque visiteur</strong> :</p>
+        <div class="card card-danger" style="margin-top:4px; font-size:.9em; padding:8px; text-align:center;">
+          🚨 <strong>popup :</strong> "Vous êtes piraté !" — exécuté dans leur navigateur
+        </div>
+        <p class="c-danger" style="margin-top:6px; font-weight:700;">❌ Code JavaScript exécuté chez tous les visiteurs</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pourquoi ça marche -->
+  <div class="g2 f60" style="margin-bottom:10px;">
+    <div class="card card-warn">
+      <h4 class="c-warn" style="margin-top:0">🔍 Pourquoi ça marche ?</h4>
+      <p>Sans échappement, le serveur génère ce HTML :</p>
+      <pre style="margin-top:6px;"><code class="language-html" style="font-size:.82em;">&lt;!-- Page HTML générée — DANGEREUX --&gt;
+&lt;p&gt;Message de Kevin :&lt;/p&gt;
+&lt;p&gt;
+  &lt;script&gt;alert('Vous êtes piraté !')&lt;/script&gt;
+&lt;/p&gt;
+&lt;!-- Le navigateur voit du &lt;script&gt;
+     et l'exécute immédiatement ! --&gt;</code></pre>
+    </div>
+    <div class="card card-success">
+      <h4 class="c-ok" style="margin-top:0">✅ Avec échappement — Inoffensif</h4>
+      <p>Le serveur transforme les <code>&lt;</code> et <code>&gt;</code> avant d'afficher :</p>
+      <pre style="margin-top:6px;"><code class="language-html" style="font-size:.82em;">&lt;!-- Page HTML générée — SÉCURISÉ --&gt;
+&lt;p&gt;Message de Kevin :&lt;/p&gt;
+&lt;p&gt;
+  &amp;lt;script&amp;gt;alert('...')&amp;lt;/script&amp;gt;
+&lt;/p&gt;
+&lt;!-- Le navigateur affiche le texte
+     tel quel — rien n'est exécuté ✅ --&gt;</code></pre>
+    </div>
+  </div>
+
+  <!-- Résumé visuel -->
+  <div class="card f60" style="border-color:var(--gold); text-align:center; padding:12px;">
+    <div class="g3">
+      <div>
+        <span style="font-size:1.6em;">📝</span><br>
+        <strong class="c-warn">L'attaquant</strong><br>
+        tape du code HTML/JS dans un champ texte ordinaire
+      </div>
+      <div>
+        <span style="font-size:1.6em;">🔐</span><br>
+        <strong class="c-accent">L'échappement</strong><br>
+        transforme <code>&lt;</code> en <code>&amp;lt;</code> — le navigateur lit du texte, pas du code
+      </div>
+      <div>
+        <span style="font-size:1.6em;">✅</span><br>
+        <strong class="c-ok">Résultat</strong><br>
+        Le message s'affiche comme du texte inoffensif — jamais exécuté
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rendu Serveur vs Rendu Client -->
+<section>
+  <h2>Rendu Serveur vs Rendu Client — Impact Sécurité</h2>
+  <div class="hbox f65" style="margin-bottom:12px;">
+    <strong class="c-gold">Pourquoi c'est important :</strong> Le lieu où la page est construite détermine <em>où</em> l'échappement doit avoir lieu — et qui est responsable de la protection contre le XSS.
+  </div>
+
+  <div class="g2 f60" style="margin-bottom:12px;">
+
+    <!-- SSR -->
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">🖥️ Rendu Côté Serveur (SSR)</h4>
+      <p style="color:var(--muted); margin-bottom:8px;">Le serveur assemble le HTML complet, puis l'envoie au navigateur.</p>
+      <div style="display:flex; align-items:center; gap:6px; font-size:.85em; margin-bottom:8px;">
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(30,136,229,.1);">👤<br>Navigateur<br><span style="color:var(--muted);">fait une requête</span></div>
+        <div style="color:var(--accent);">→</div>
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(18,80,163,.2);">⚙️<br>Serveur<br><span style="color:var(--muted);">génère le HTML</span></div>
+        <div style="color:var(--accent);">→</div>
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(30,136,229,.1);">📄<br>HTML complet<br><span style="color:var(--muted);">reçu et affiché</span></div>
+      </div>
+      <pre><code class="language-html" style="font-size:.78em;">&lt;!-- Thymeleaf (Java) — échappement auto --&gt;
+&lt;p th:text="${user.comment}"&gt;&lt;/p&gt;
+&lt;!-- th:text échappe &lt; &gt; " automatiquement --&gt;
+
+&lt;!-- th:utext = PAS d'échappement → dangereux --&gt;
+&lt;p th:utext="${user.comment}"&gt;&lt;/p&gt;</code></pre>
+      <ul style="margin-top:8px;">
+        <li>Exemples : <span class="tag">Thymeleaf</span> <span class="tag">Django</span> <span class="tag">PHP</span> <span class="tag">Rails</span> <span class="tag">JSP</span></li>
+        <li>L'échappement se fait <strong>sur le serveur</strong>, avant l'envoi</li>
+        <li>Le navigateur reçoit du HTML déjà sécurisé</li>
+      </ul>
+    </div>
+
+    <!-- CSR -->
+    <div class="card card-l">
+      <h4 class="c-accent" style="margin-top:0">🌐 Rendu Côté Client (CSR)</h4>
+      <p style="color:var(--muted); margin-bottom:8px;">Le navigateur reçoit du JavaScript, qui construit la page dynamiquement.</p>
+      <div style="display:flex; align-items:center; gap:6px; font-size:.85em; margin-bottom:8px;">
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(30,136,229,.1);">👤<br>Navigateur<br><span style="color:var(--muted);">reçoit JS + JSON</span></div>
+        <div style="color:var(--accent);">→</div>
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(61,219,133,.1);">⚛️<br>React/Vue/Angular<br><span style="color:var(--muted);">construit le DOM</span></div>
+        <div style="color:var(--accent);">→</div>
+        <div class="card" style="flex:1; text-align:center; padding:6px; background:rgba(30,136,229,.1);">🖼️<br>Page rendue<br><span style="color:var(--muted);">dans le navigateur</span></div>
+      </div>
+      <pre><code class="language-jsx" style="font-size:.78em;">// React — échappement automatique via JSX ✅
+&lt;p&gt;{user.comment}&lt;/p&gt;
+// JSX échappe les &lt; &gt; automatiquement ✅
+
+// dangerouslySetInnerHTML → PAS d'échappement ❌
+&lt;p dangerouslySetInnerHTML=
+  {{__html: user.comment}} /&gt;
+// Le nom dit tout : "dangerously" ⚠️</code></pre>
+      <ul style="margin-top:8px;">
+        <li>Exemples : <span class="tag">React</span> <span class="tag">Vue</span> <span class="tag">Angular</span> <span class="tag">Svelte</span></li>
+        <li>L'échappement se fait <strong>dans le navigateur</strong>, par le framework JS</li>
+        <li>Les données viennent d'une API REST/GraphQL → valider côté serveur aussi</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Tableau comparatif -->
+  <table class="stride-table f60">
+    <thead>
+      <tr>
+        <th>Critère</th>
+        <th>SSR — Côté Serveur</th>
+        <th>CSR — Côté Client</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Où est généré le HTML ?</strong></td>
+        <td>Sur le serveur (Java, Python, PHP…)</td>
+        <td>Dans le navigateur (JavaScript)</td>
+      </tr>
+      <tr>
+        <td><strong>Où échapper ?</strong></td>
+        <td class="c-ok">Côté serveur, avant l'envoi</td>
+        <td class="c-ok">Côté client, via le framework JS</td>
+      </tr>
+      <tr>
+        <td><strong>Risque si mal fait</strong></td>
+        <td class="c-danger">XSS Réfléchi / Stocké</td>
+        <td class="c-danger">DOM-based XSS</td>
+      </tr>
+      <tr>
+        <td><strong>API exposée ?</strong></td>
+        <td>Non (HTML final direct)</td>
+        <td class="c-warn">Oui — API REST/GraphQL à sécuriser aussi</td>
+      </tr>
+      <tr>
+        <td><strong>Frameworks qui échappent auto</strong></td>
+        <td class="c-ok">Thymeleaf <code>th:text</code>, Django <code>{{ }}</code>, Rails ERB</td>
+        <td class="c-ok">React JSX <code>{}</code>, Angular <code>{{ }}</code>, Vue <code>{{ }}</code></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- M2 — Threat Modeling STRIDE -->
+<section>
+  <h2>Threat Modeling — STRIDE</h2>
+  <div class="hbox f65">
+    Le Threat Modeling est une analyse structurée des menaces réalisée <strong class="c-gold">dès la phase de conception</strong> pour identifier, quantifier et traiter les risques avant qu'ils ne deviennent des vulnérabilités exploitables.
+  </div>
+  <div class="f60 mt10">
+    <table class="stride-table">
+      <thead>
+        <tr>
+          <th>Lettre</th>
+          <th>Menace</th>
+          <th>Description</th>
+          <th>Propriété violée</th>
+          <th>Contrôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong class="c-danger">S</strong></td>
+          <td>Spoofing</td>
+          <td>Usurpation d'identité</td>
+          <td>Authentification</td>
+          <td class="c-ok">MFA, certificats</td>
+        </tr>
+        <tr>
+          <td><strong class="c-danger">T</strong></td>
+          <td>Tampering</td>
+          <td>Altération des données</td>
+          <td>Intégrité</td>
+          <td class="c-ok">HMAC, signatures</td>
+        </tr>
+        <tr>
+          <td><strong class="c-danger">R</strong></td>
+          <td>Repudiation</td>
+          <td>Nier avoir effectué une action</td>
+          <td>Non-répudiation</td>
+          <td class="c-ok">Logs horodatés &amp; signés</td>
+        </tr>
+        <tr>
+          <td><strong class="c-danger">I</strong></td>
+          <td>Information Disclosure</td>
+          <td>Divulgation d'informations sensibles</td>
+          <td>Confidentialité</td>
+          <td class="c-ok">Chiffrement, contrôle d'accès</td>
+        </tr>
+        <tr>
+          <td><strong class="c-danger">D</strong></td>
+          <td>Denial of Service</td>
+          <td>Perturbation de la disponibilité</td>
+          <td>Disponibilité</td>
+          <td class="c-ok">Rate limiting, redondance</td>
+        </tr>
+        <tr>
+          <td><strong class="c-danger">E</strong></td>
+          <td>Elevation of Privilege</td>
+          <td>Escalade de privilèges non autorisée</td>
+          <td>Autorisation</td>
+          <td class="c-ok">Moindre privilège, RBAC</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- M2 — Livrables -->
+<section>
+  <h2>Livrables dans un Projet Numérique Sécurisé</h2>
+  <div class="g2 f60">
+    <div>
+      <div class="card card-l">
+        <h4 class="c-accent" style="margin-top:0">Documentation &amp; Architecture</h4>
+        <ul>
+          <li>Exigences fonctionnelles (Métier)</li>
+          <li>Spécifications techniques (Performances, Maintenance, Sécurité)</li>
+          <li>Architecture cible : fonctionnelle · applicative · technique · sécurité</li>
+          <li>Rapport de Threat Modeling (matrice STRIDE remplie)</li>
+          <li>Diagrammes de flux de données (DFD)</li>
+          <li>Cahier des Charges MVP · Plan projet</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card card-warn">
+        <h4 class="c-warn" style="margin-top:0">Tests &amp; Validation</h4>
+        <ul>
+          <li>Rapport SAST (analyse statique)</li>
+          <li>Rapport DAST (analyse dynamique)</li>
+          <li>Rapport de test de pénétration</li>
+          <li>Rapport SCA (dépendances)</li>
+          <li>Tests de régression sécurité</li>
+          <li>Rapport de conformité réglementaire</li>
+        </ul>
+      </div>
+      <div class="card mt10">
+        <h4 class="c-accent" style="margin-top:0">Opérationnel</h4>
+        <ul>
+          <li>Plan de réponse aux incidents</li>
+          <li>Runbook de sécurité · Politique patches</li>
+          <li>Formation &amp; sensibilisation équipe</li>
+          <li>Exigences financières &amp; de conformité</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 3 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M3</div>
+  <span class="badge b-danger" style="font-size:.45em;">Module 3 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Vulnérabilités Applicatives
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    OWASP Top 10 · Injection · XSS · CSRF · A04 Insecure Design
+  </h3>
+</section>
+
+<!-- M3 — OWASP Top 10 2021 -->
+<section>
+  <h2>OWASP Top 10 — 2021</h2>
+  <div>
+    <div class="ow-item">
+      <span class="ow-rank">A01</span>
+      <div><strong>Broken Access Control</strong> — Contrôle d'accès défaillant · 94 % des apps testées vulnérables · Ex : IDOR, escalade de rôle</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A02</span>
+      <div><strong>Cryptographic Failures</strong> — Données sensibles exposées en clair · Algorithmes faibles (MD5, SHA1, DES)</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A03</span>
+      <div><strong>Injection</strong> — SQL, NoSQL, LDAP, OS Command, XSS · 3e cause de compromission mondiale</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank" style="color:var(--warning);">A04</span>
+      <div><strong>Insecure Design</strong>  <em>Nouveau 2021</em> — Absence de threat modeling et de Security by Design dès la conception</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A05</span>
+      <div><strong>Security Misconfiguration</strong> — Comptes par défaut, configs exposées, debug activé en prod</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A06</span>
+      <div><strong>Vulnerable &amp; Outdated Components</strong> — Dépendances avec CVE connues (Log4Shell, Heartbleed…)</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A07</span>
+      <div><strong>Identification &amp; Authentication Failures</strong> — Sessions faibles, pas de MFA, bruteforce possible</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A08</span>
+      <div><strong>Software &amp; Data Integrity Failures</strong>  <em>Nouveau</em> — CI/CD non sécurisé, désérialisation non fiable, supply chain</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A09</span>
+      <div><strong>Security Logging &amp; Monitoring Failures</strong> — Absence de journalisation, pas de détection d'incidents</div>
+    </div>
+    <div class="ow-item">
+      <span class="ow-rank">A10</span>
+      <div><strong>Server-Side Request Forgery (SSRF)</strong>  <em>Nouveau</em> — Requêtes forgées vers des ressources internes</div>
+    </div>
+  </div>
+</section>
+
+<!-- M3 — OWASP Évolution 2017 → 2021 -->
+<section>
+  <h2>OWASP Top 10 — Évolution 2017 → 2021</h2>
+  <div style="font-size:.54em;">
+    <div style="display:grid; grid-template-columns:1fr 60px 1fr; gap:6px; align-items:start;">
+
+      <!-- Colonne 2017 -->
+      <div>
+        <div style="text-align:center; font-weight:700; color:var(--muted); margin-bottom:8px; letter-spacing:.06em; font-size:.9em;">2017</div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A1</span>
+          <span>Injection</span>
+        </div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A2</span>
+          <span>Broken Authentication</span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A3</span>
+          <span>Sensitive Data Exposure</span>
+        </div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A4</span>
+          <span>XXE</span>
+        </div>
+        <div class="ow-item" style="background:rgba(61,219,133,.1); border-color:rgba(61,219,133,.3);">
+          <span class="ow-rank" style="font-size:.95em; color:var(--accent2);">A5</span>
+          <span>Broken Access Control</span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A6</span>
+          <span>Security Misconfiguration</span>
+        </div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A7</span>
+          <span>XSS</span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A8</span>
+          <span>Insecure Deserialization</span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A9</span>
+          <span>Using Components w/ Known Vuln.</span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A10</span>
+          <span>Insufficient Logging &amp; Monitoring</span>
+        </div>
+      </div>
+
+      <!-- Légende centrale -->
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding-top:26px; color:var(--muted); font-size:.88em; font-weight:600;">
+        <span title="monté">↑</span>
+        <span title="descendu">↓</span>
+        <span title="fusionné">⤵</span>
+        <span title="renommé">≈</span>
+        <span title="nouveau"></span>
+        <div style="margin-top:10px; display:flex; flex-direction:column; gap:4px; font-size:.82em; color:var(--muted); line-height:1.6; white-space:nowrap;">
+          <span><span style="color:var(--accent2); font-weight:700;">↑</span> Monte</span>
+          <span><span style="color:var(--danger); font-weight:700;">↓</span> Descend</span>
+          <span>⤵ Fusion</span>
+          <span>≈ Renommé</span>
+          <span style="color:var(--warning); font-weight:700;"> Nouveau</span>
+        </div>
+      </div>
+
+      <!-- Colonne 2021 -->
+      <div>
+        <div style="text-align:center; font-weight:700; color:var(--accent); margin-bottom:8px; letter-spacing:.06em; font-size:.9em;">2021 — Dernière version</div>
+        <div class="ow-item" style="background:rgba(61,219,133,.1); border-color:rgba(61,219,133,.3);">
+          <span class="ow-rank" style="font-size:.95em; color:var(--accent2);">A01</span>
+          <span><strong>Broken Access Control</strong> <span style="color:var(--accent2);">↑ (+4)</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A02</span>
+          <span><strong>Cryptographic Failures</strong> <span style="color:var(--muted);">≈ renommé</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A03</span>
+          <span><strong>Injection</strong> <span style="color:var(--danger);">↓ (XSS fusionné ⤵)</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,215,0,.1); border-color:rgba(255,215,0,.35);">
+          <span class="ow-rank" style="font-size:.95em; color:var(--gold);">A04</span>
+          <span><strong>Insecure Design</strong> <span style="color:var(--gold);"> Nouveau</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A05</span>
+          <span><strong>Security Misconfiguration</strong> <span style="color:var(--muted);">(XXE fusionné ⤵)</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A06</span>
+          <span><strong>Vulnerable &amp; Outdated Components</strong> <span style="color:var(--muted);">≈</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(240,76,106,.08); border-color:rgba(240,76,106,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A07</span>
+          <span><strong>Identification &amp; Auth Failures</strong> <span style="color:var(--danger);">↓</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,215,0,.1); border-color:rgba(255,215,0,.35);">
+          <span class="ow-rank" style="font-size:.95em; color:var(--gold);">A08</span>
+          <span><strong>Software &amp; Data Integrity Failures</strong> <span style="color:var(--gold);"> Nouveau</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,184,48,.08); border-color:rgba(255,184,48,.25);">
+          <span class="ow-rank" style="font-size:.95em;">A09</span>
+          <span><strong>Security Logging &amp; Monitoring</strong> <span style="color:var(--muted);">≈ renommé</span></span>
+        </div>
+        <div class="ow-item" style="background:rgba(255,215,0,.1); border-color:rgba(255,215,0,.35);">
+          <span class="ow-rank" style="font-size:.95em; color:var(--gold);">A10</span>
+          <span><strong>SSRF</strong> <span style="color:var(--gold);"> Nouveau</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résumé -->
+    <div style="display:flex; justify-content:center; gap:14px; margin-top:12px; flex-wrap:wrap;">
+      <div class="stat-box" style="padding:8px 18px; flex:0 0 auto;">
+        <span class="stat-num" style="font-size:1.4em; color:var(--gold);">3</span>
+        <span class="stat-lbl">Nouvelles catégories</span>
+      </div>
+      <div class="stat-box" style="padding:8px 18px; flex:0 0 auto;">
+        <span class="stat-num" style="font-size:1.4em; color:var(--muted);">3</span>
+        <span class="stat-lbl">Catégories fusionnées</span>
+      </div>
+      <div class="stat-box" style="padding:8px 18px; flex:0 0 auto;">
+        <span class="stat-num" style="font-size:1.4em; color:var(--accent2);">4</span>
+        <span class="stat-lbl">Catégories renommées</span>
+      </div>
+      <div class="hbox" style="margin:0; padding:8px 18px; flex:1; min-width:260px; font-size:.9em;">
+        <strong class="c-gold">Focus 2021 :</strong> L'accent est mis sur la <strong>conception sécurisée (A04)</strong> et l'<strong>intégrité de la chaîne logicielle (A08)</strong> — reflet direct des enjeux SSDLC et DevSecOps.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M3 — SQL Injection -->
+<section>
+  <h2>A03 — Injection SQL : Comprendre &amp; Corriger</h2>
+  <div class="g2 f60">
+    <div>
+      <div class="card card-danger">
+        <h4 class="c-danger" style="margin-top:0">Code Vulnérable</h4>
+        <pre style="background:#0d1117; padding:10px; border-radius:6px; font-size:.82em; border-left:3px solid var(--danger);"><code class="language-java">// DANGEREUX — concaténation directe
+String q = "SELECT * FROM users WHERE " +
+  "login='" + login + "' AND " +
+  "password='" + password + "'";
+
+// Attaque : login = "admin' --"
+// → SELECT * FROM users WHERE
+//   login='admin' --' AND password='x'
+// L'attaquant contourne l'authentification !</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="card card-success">
+        <h4 class="c-ok" style="margin-top:0">Code Sécurisé — Requêtes paramétrées</h4>
+        <pre style="background:#0d1117; padding:10px; border-radius:6px; font-size:.82em; border-left:3px solid var(--accent2);"><code class="language-java">// SÉCURISÉ — PreparedStatement
+PreparedStatement ps = conn.prepareStatement(
+  "SELECT * FROM users " +
+  "WHERE login = ? AND password = ?"
+);
+ps.setString(1, login);
+ps.setString(2, bcrypt(password));
+ResultSet rs = ps.executeQuery();
+// Les ? ne sont jamais exécutés comme SQL</code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="hbox f60 mt10">
+    <strong>Prévention :</strong>
+    <span class="tag">Requêtes paramétrées</span>
+    <span class="tag">ORM (Hibernate, JPA)</span>
+    <span class="tag">Validation des entrées</span>
+    <span class="tag">Moindre privilège BDD</span>
+    <span class="tag">WAF</span>
+    <span class="tag">SAST (SonarQube)</span>
+  </div>
+</section>
+
+<!-- M3 — XSS + CSRF -->
+<section>
+  <h2>XSS &amp; CSRF — Attaques côté Client</h2>
+  <div class="g2 f60">
+    <div>
+      <h3 class="c-accent" style="font-size:.9em;">XSS — Cross-Site Scripting</h3>
+      <div class="card card-danger" style="margin-bottom:8px;">
+        <strong class="c-danger">Réfléchi (Reflected)</strong> — Script dans URL, exécuté immédiatement. Vecteur de phishing.
+      </div>
+      <div class="card card-danger" style="margin-bottom:8px;">
+        <strong class="c-danger">Stocké (Stored)</strong> — Script en BDD, exécuté à chaque visite. Le plus dangereux.
+      </div>
+      <div class="card card-warn" style="margin-bottom:8px;">
+        <strong class="c-warn">DOM-based</strong> — Manipulation côté client via JS vulnérable.
+      </div>
+      <div class="card card-success">
+        <h4 class="c-ok" style="margin:0 0 6px 0;">Prévention XSS</h4>
+        <ul>
+          <li>Échapper les sorties HTML</li>
+          <li>Content Security Policy (CSP)</li>
+          <li>HttpOnly &amp; Secure cookies</li>
+          <li>DOMPurify pour le HTML dynamique</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c-accent" style="font-size:.9em;">CSRF — Cross-Site Request Forgery</h3>
+      <div class="card card-danger" style="margin-bottom:8px;">
+        <strong>Principe :</strong> Forcer un utilisateur authentifié à exécuter une action non désirée sur le site cible (virement, changement de mot de passe…)
+      </div>
+      <div class="card card-warn" style="margin-bottom:8px;">
+        <strong>Exemple d'attaque :</strong>
+        <pre style="font-size:.85em; margin:4px 0 0 0; background:#0d1117; padding:6px; border-radius:4px;"><code>&lt;img src="https://bank.com/transfer
+  ?to=attacker&amp;amount=9999"&gt;</code></pre>
+      </div>
+      <div class="card card-success">
+        <h4 class="c-ok" style="margin:0 0 6px 0;">Prévention CSRF</h4>
+        <ul>
+          <li>Tokens CSRF (synchronizer token pattern)</li>
+          <li>SameSite cookie attribute</li>
+          <li>Vérifier l'en-tête Origin/Referer</li>
+          <li>Double Submit Cookie</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 4 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M4</div>
+  <span class="badge b-accent" style="font-size:.45em;">Module 4 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    DevSecOps &amp; Automatisation
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    CI/CD Sécurisé · SAST · DAST · Conteneurs · Dépendances
+  </h3>
+</section>
+
+<!-- M4 — Pipeline DevSecOps -->
+<section>
+  <h2>Le Pipeline DevSecOps — Sécurité à Chaque Étape</h2>
+  <div class="pipeline f60">
+    <div class="pip" style="background:rgba(18,80,163,.3); border:1px solid var(--blue);">
+      <div style="font-size:1.8em; margin-bottom:4px;"></div>
+      <strong>PLAN</strong><br>
+      <small style="color:var(--muted);">Threat Model<br>Exigences sécu<br>Abuse cases</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(0,200,212,.15); border:1px solid var(--accent);">
+      <div style="font-size:1.8em; margin-bottom:4px;"> </div>
+      <strong>CODE</strong><br>
+      <small style="color:var(--muted);">Linters<br>Pre-commit<br>GitLeaks</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(61,219,133,.15); border:1px solid var(--accent2);">
+      <div style="font-size:1.8em; margin-bottom:4px;"></div>
+      <strong>BUILD</strong><br>
+      <small style="color:var(--muted);">SAST<br>SCA<br>Lint sécu</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(255,184,48,.15); border:1px solid var(--warning);">
+      <div style="font-size:1.8em; margin-bottom:4px;"></div>
+      <strong>TEST</strong><br>
+      <small style="color:var(--muted);">DAST<br>IAST<br>Fuzzing</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(156,39,176,.15); border:1px solid #9C27B0;">
+      <div style="font-size:1.8em; margin-bottom:4px;"></div>
+      <strong>RELEASE</strong><br>
+      <small style="color:var(--muted);">Image scan<br>Signing<br>SBOM</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(240,76,106,.15); border:1px solid var(--danger);">
+      <div style="font-size:1.8em; margin-bottom:4px;"></div>
+      <strong>DEPLOY</strong><br>
+      <small style="color:var(--muted);">Config sécurisée<br>Vault<br>RBAC</small>
+    </div>
+    <div class="pip-arr">→</div>
+    <div class="pip" style="background:rgba(0,150,136,.15); border:1px solid #009688;">
+      <div style="font-size:1.8em; margin-bottom:4px;">️</div>
+      <strong>OPERATE</strong><br>
+      <small style="color:var(--muted);">SIEM<br>IDS/IPS<br>WAF</small>
+    </div>
+  </div>
+  <div class="g2 f60 mt10">
+    <div class="card card-success">
+      <strong class="c-ok">SAST — Boîte Blanche</strong><br>
+      Analyse code source sans exécution. Intégré au commit.<br>
+      <em>SonarQube · Semgrep · Checkmarx · CodeQL</em>
+    </div>
+    <div class="card card-warn">
+      <strong class="c-warn">DAST — Boîte Noire</strong><br>
+      Teste l'application en cours d'exécution sur env de staging.<br>
+      <em>OWASP ZAP · Burp Suite · Nikto · Nuclei</em>
+    </div>
+  </div>
+</section>
+
+<!-- M4 — Écosystème Outils -->
+<section>
+  <h2>Écosystème Outils DevSecOps</h2>
+  <div class="g3 f60">
+    <div class="card">
+      <h4 class="c-accent" style="margin-top:0">Analyse Statique (SAST)</h4>
+      <ul>
+        <li><strong>SonarQube</strong> — SAST multilangage</li>
+        <li><strong>Semgrep</strong> — Règles personnalisées</li>
+        <li><strong>Checkmarx</strong> — Enterprise SAST</li>
+        <li><strong>CodeQL</strong> — GitHub (gratuit open source)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="c-warn" style="margin-top:0">Secrets &amp; Dépendances</h4>
+      <ul>
+        <li><strong>GitLeaks</strong> — Scan secrets dans git</li>
+        <li><strong>TruffleHog</strong> — Historique git</li>
+        <li><strong>Snyk</strong> — Vulnérabilités deps</li>
+        <li><strong>OWASP Dep-Check</strong> — CVE deps</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="c-danger" style="margin-top:0">Tests Dynamiques (DAST)</h4>
+      <ul>
+        <li><strong>OWASP ZAP</strong> — Scanner web open source</li>
+        <li><strong>Burp Suite</strong> — Proxy interception</li>
+        <li><strong>Nuclei</strong> — Templates vulnérabilités</li>
+        <li><strong>sqlmap</strong> — Injection SQL automatisée</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="c-ok" style="margin-top:0">Conteneurs &amp; Cloud</h4>
+      <ul>
+        <li><strong>Trivy</strong> — Scanner images Docker</li>
+        <li><strong>Clair</strong> — Analyse vulnérabilités</li>
+        <li><strong>Falco</strong> — Runtime security K8s</li>
+        <li><strong>kube-bench</strong> — CIS Kubernetes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="c-accent" style="margin-top:0">Gestion des Secrets</h4>
+      <ul>
+        <li><strong>HashiCorp Vault</strong> — Secrets management</li>
+        <li><strong>AWS Secrets Manager</strong></li>
+        <li><strong>Azure Key Vault</strong></li>
+        <li><strong>Doppler</strong> — Secrets synchronisés CI/CD</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="c-warn" style="margin-top:0">Monitoring &amp; SIEM</h4>
+      <ul>
+        <li><strong>Wazuh</strong> — SIEM open source</li>
+        <li><strong>Splunk</strong> — Analytics sécurité</li>
+        <li><strong>ELK Stack</strong> — Logs centralisés</li>
+        <li><strong>Grafana + Prometheus</strong> — Métriques</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 5 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M5</div>
+  <span class="badge b-success" style="font-size:.45em;">Module 5 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Pratiques de Codage Sécurisé
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    Validation · Chiffrement · Secrets · Revue de code
+  </h3>
+</section>
+
+<!-- M5 — Principes codage sécurisé -->
+<section>
+  <h2>Principes de Codage Sécurisé</h2>
+  <div class="g2 f62">
+    <div>
+      <div class="card card-l" style="margin-bottom:10px;">
+        <h4 class="c-accent" style="margin-top:0">① Validation des Entrées</h4>
+        Valider TOUT input (forms, APIs, URL params, headers, cookies). Utiliser des listes blanches (whitelist). Valider type, taille, format, plage de valeurs.
+      </div>
+      <div class="card card-l" style="margin-bottom:10px;">
+        <h4 class="c-accent" style="margin-top:0">② Encodage des Sorties</h4>
+        Encoder les données selon le contexte de sortie (HTML, URL, JavaScript, SQL). Utiliser des fonctions dédiées plutôt que du code manuel.
+      </div>
+      <div class="card card-l">
+        <h4 class="c-accent" style="margin-top:0">③ Authentification &amp; Sessions</h4>
+        MFA obligatoire · Hachage (bcrypt, Argon2) · Tokens sécurisés · Expiration · Invalidation à la déconnexion
+      </div>
+    </div>
+    <div>
+      <div class="card card-l" style="margin-bottom:10px;">
+        <h4 class="c-accent" style="margin-top:0">④ Gestion des Erreurs</h4>
+        Ne jamais exposer les détails techniques en production. Logger côté serveur, afficher des messages génériques côté client. Toujours <em>fail securely</em>.
+      </div>
+      <div class="card card-l" style="margin-bottom:10px;">
+        <h4 class="c-accent" style="margin-top:0">⑤ Chiffrement des Données</h4>
+        TLS 1.3 en transit · AES-256-GCM au repos · Jamais de mots de passe en clair · Rotation régulière des clés
+      </div>
+      <div class="card card-l">
+        <h4 class="c-accent" style="margin-top:0">⑥ Gestion des Dépendances</h4>
+        Scanner régulièrement (SCA) · Lockfile (versions fixes) · Supprimer les dépendances inutilisées · SBOM obligatoire
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M5 — Gestion des Secrets -->
+<section>
+  <h2>Gestion des Secrets — Ne Jamais Coder en Dur !</h2>
+  <div class="g2 f60">
+    <div>
+      <div class="card card-danger">
+        <h4 class="c-danger" style="margin-top:0">INTERDIT — Hardcoded secrets</h4>
+        <pre style="background:#0d1117; padding:10px; border-radius:6px; border-left:3px solid var(--danger);"><code class="language-java">// NE JAMAIS FAIRE ÇA !
+String apiKey = "sk-1234567890abcdef";
+String dbPass = "MySecretPass123!";
+String jwtSecret = "my-secret-key";
+
+// Ces secrets finissent dans Git !
+// Indexés par GitHub/GitLab
+// Exposés pour toujours dans l'historique</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="card card-success">
+        <h4 class="c-ok" style="margin-top:0">CORRECT — Variables env / Vault</h4>
+        <pre style="background:#0d1117; padding:10px; border-radius:6px; border-left:3px solid var(--accent2);"><code class="language-java">// Variables d'environnement
+String apiKey = System.getenv("API_KEY");
+
+// Spring Boot — application.yml
+@Value("${db.password}")
+private String dbPassword;
+
+// HashiCorp Vault
+VaultResponse r = vault.read("secret/app");
+String secret = (String) r.getData()
+                           .get("password");</code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="hbox f60 mt10">
+    <strong>Bonnes pratiques :</strong>
+    <span class="tag">.gitignore pour .env</span>
+    <span class="tag">GitLeaks en pre-commit</span>
+    <span class="tag">Rotation automatique</span>
+    <span class="tag">Vault / AWS Secrets Manager</span>
+    <span class="tag">Moindre accès aux secrets</span>
+    <span class="tag">Audit trail accès secrets</span>
+  </div>
+</section>
+
+<!-- M5 — Revue de Code -->
+<section>
+  <h2>Revue de Code Sécurité — Checklist</h2>
+  <div class="g2 f62">
+    <div>
+      <h3 class="c-accent" style="font-size:.85em;">Questions à se poser</h3>
+      <div class="card">
+        <ul>
+          <li>Les entrées sont-elles validées et assainies ?</li>
+          <li>Les sorties sont-elles correctement encodées ?</li>
+          <li>Y a-t-il des secrets hardcodés ?</li>
+          <li>Les requêtes SQL sont-elles paramétrées ?</li>
+          <li>La gestion des erreurs est-elle sécurisée ?</li>
+          <li>Les dépendances sont-elles à jour et scannées ?</li>
+          <li>Le principe du moindre privilège est-il respecté ?</li>
+          <li>Les données sensibles sont-elles chiffrées ?</li>
+          <li>Les logs exposent-ils des informations sensibles ?</li>
+          <li>Les tokens et sessions expirent-ils correctement ?</li>
+          <li>L'authentification et l'autorisation sont-elles vérifiées côté serveur ?</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c-accent" style="font-size:.85em;">Outils &amp; Référentiels</h3>
+      <div class="card card-l" style="margin-bottom:8px;">
+        <strong>Linters de sécurité</strong><br>
+        ESLint security plugin · Spotless · PMD · Checkstyle
+      </div>
+      <div class="card card-l" style="margin-bottom:8px;">
+        <strong>SAST dans CI</strong><br>
+        SonarQube Quality Gate · Semgrep CI rules · CodeQL
+      </div>
+      <div class="card card-l" style="margin-bottom:8px;">
+        <strong>Normes de référence</strong><br>
+        OWASP ASVS · CERT Secure Coding · CWE Top 25 · NIST 800-218
+      </div>
+      <div class="card card-success">
+        <strong class="c-ok">OWASP ASVS</strong> (Application Security Verification Standard)<br>
+        3 niveaux de vérification (L1, L2, L3) couvrant 286 exigences de sécurité applicative
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 6 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M6</div>
+  <span class="badge b-warn" style="font-size:.45em;">Module 6 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Tests de Sécurité &amp; Outils
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    ZAP · SonarQube · Snyk · GitLeaks · Pentest
+  </h3>
+</section>
+
+<!-- M6 — Stratégie de tests -->
+<section>
+  <h2>Stratégie de Tests de Sécurité</h2>
+  <div class="g2 f62">
+    <div>
+      <div class="card card-success" style="margin-bottom:10px;">
+        <h4 class="c-ok" style="margin-top:0">SAST — Boîte Blanche</h4>
+        Analyse code source sans exécution · Détecte au niveau du code<br>
+        <strong>Quand :</strong> CI/CD au commit (shift-left)<br>
+        <strong>Outils :</strong> SonarQube, Semgrep, Checkmarx, CodeQL<br>
+        <strong>Trouve :</strong> SQL injection, XSS, secrets hardcodés, null pointers
+      </div>
+      <div class="card card-warn">
+        <h4 class="c-warn" style="margin-top:0">DAST — Boîte Noire</h4>
+        Teste l'app en exécution · Simule un attaquant externe<br>
+        <strong>Quand :</strong> Environnement de staging, avant release<br>
+        <strong>Outils :</strong> OWASP ZAP, Burp Suite, Nikto, Nuclei<br>
+        <strong>Trouve :</strong> Injections runtime, auth bypass, misconfig
+      </div>
+    </div>
+    <div>
+      <div class="card card-blue" style="margin-bottom:10px;">
+        <h4 class="c-accent" style="margin-top:0">SCA — Analyse des Composants</h4>
+        Analyse dépendances tierces pour CVE connues<br>
+        <strong>Quand :</strong> Continu (à chaque mise à jour de deps)<br>
+        <strong>Outils :</strong> Snyk, OWASP Dep-Check, Trivy<br>
+        <strong>Trouve :</strong> CVE dans librairies, licences problématiques
+      </div>
+      <div class="card">
+        <h4 class="c-accent" style="margin-top:0">Pentest — Boîte Grise/Noire</h4>
+        Test manuel par un expert sécurité<br>
+        <strong>Quand :</strong> Annuel ou avant mise en production majeure<br>
+        <strong>Outils :</strong> Metasploit, Burp Pro, sqlmap, Nmap<br>
+        <strong>Trouve :</strong> Vulnérabilités logiques, chaînes d'exploitation
+      </div>
+    </div>
+  </div>
+  <div class="hbox f60 center mt10">
+    <strong>Approche complémentaire :</strong> SAST (shift-left) + DAST (staging) + SCA (continu) + Pentest (annuel) = couverture maximale
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 7 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M7</div>
+  <span class="badge b-accent" style="font-size:.45em;">Module 7 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Architectures Modernes
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    API Security · JWT · OAuth2 · Zero Trust · Cloud IAM
+  </h3>
+</section>
+
+<!-- M7 — API Security + JWT -->
+<section>
+  <h2>Sécurité des APIs &amp; Authentification Moderne</h2>
+  <div class="g2 f62">
+    <div>
+      <h3 class="c-accent" style="font-size:.85em;">OWASP API Security Top 10 (2023)</h3>
+      <div class="card" style="font-size:.9em;">
+        <ul>
+          <li><strong>API1</strong> — Broken Object Level Authorization (BOLA/IDOR)</li>
+          <li><strong>API2</strong> — Broken Authentication</li>
+          <li><strong>API3</strong> — Broken Object Property Auth (mass assignment)</li>
+          <li><strong>API4</strong> — Unrestricted Resource Consumption</li>
+          <li><strong>API5</strong> — Broken Function Level Authorization</li>
+          <li><strong>API6</strong> — Sensitive Business Flow Exposure</li>
+          <li><strong>API7</strong> — Server Side Request Forgery</li>
+          <li><strong>API8</strong> — Security Misconfiguration</li>
+          <li><strong>API9</strong> — Improper Inventory Management</li>
+          <li><strong>API10</strong> — Unsafe Consumption of 3rd Party APIs</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card card-l" style="margin-bottom:8px;">
+        <h4 class="c-accent" style="margin-top:0">JWT — JSON Web Token</h4>
+        Structure : <code>Header.Payload.Signature</code><br>
+        Stateless · Signé (HS256/RS256/ES256) · Expirant<br>
+        <strong class="c-danger">Risques :</strong> alg:none, faibles clés, pas de rotation, révocation impossible<br>
+        <strong class="c-ok">Best practice :</strong> RS256, exp court, refresh token rotation
+      </div>
+      <div class="card card-l" style="margin-bottom:8px;">
+        <h4 class="c-accent" style="margin-top:0">OAuth2 / OpenID Connect</h4>
+        Authorization Code Flow + PKCE · Scopes minimaux<br>
+        Refresh token rotation · Token introspection<br>
+        <strong>Implémentations :</strong> Keycloak, Auth0, Okta, Spring Authorization Server
+      </div>
+      <div class="card card-l">
+        <h4 class="c-accent" style="margin-top:0">API Gateway</h4>
+        Rate limiting · Auth centralisée · WAF intégré · Logging<br>
+        <strong>Outils :</strong> Kong, AWS API Gateway, Nginx, Traefik
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M7 — Zero Trust + Cloud -->
+<section>
+  <h2>Zero Trust &amp; Sécurité Cloud</h2>
+  <div class="g2 f62">
+    <div>
+      <div class="hbox" style="margin-bottom:12px;">
+        <h3 class="c-accent" style="margin-top:0; font-size:.9em;">"Never Trust, Always Verify"</h3>
+        Pas de périmètre de confiance implicite. Chaque requête est authentifiée, autorisée et vérifiée — peu importe l'origine (interne ou externe).
+      </div>
+      <div class="card card-l">
+        <h4 class="c-accent" style="margin-top:0">Principes Zero Trust</h4>
+        <ul>
+          <li>Vérifier explicitement chaque identité</li>
+          <li>Moindre privilège d'accès à tout moment</li>
+          <li>Supposer la compromission (assume breach)</li>
+          <li>Microsegmentation réseau</li>
+          <li>MFA partout, y compris infra interne</li>
+          <li>Surveillance et logging continus</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c-accent" style="font-size:.85em;">Modèle de Responsabilité Partagée</h3>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:7px; background:rgba(240,76,106,.15); border-radius:6px; margin-bottom:5px;">
+          <strong>Données &amp; IAM</strong><span class="badge b-danger">Client</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:7px; background:rgba(240,76,106,.15); border-radius:6px; margin-bottom:5px;">
+          <strong>Applications &amp; OS</strong><span class="badge b-danger">Client</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:7px; background:rgba(0,200,212,.12); border-radius:6px; margin-bottom:5px;">
+          <strong>Réseau virtuel &amp; Firewall</strong><span class="badge b-accent">Partagé</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:7px; background:rgba(61,219,133,.12); border-radius:6px; margin-bottom:5px;">
+          <strong>Hyperviseur</strong><span class="badge b-success">Provider</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:7px; background:rgba(61,219,133,.12); border-radius:6px;">
+          <strong>Infrastructure physique</strong><span class="badge b-success">Provider</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 8 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M8</div>
+  <span class="badge b-danger" style="font-size:.45em;">Module 8 · 3h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Projet — Étude de Cas
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    Sécurisation guidée d'une application web Spring Boot vulnérable
+  </h3>
+</section>
+
+<!-- M8 — Projet -->
+<section>
+  <h2>Étude de Cas — Application WebVuln</h2>
+  <div class="quote">
+    Application web Java Spring Boot avec failles intentionnelles → Identifier · Exploiter · Corriger · Valider · Documenter
+  </div>
+  <div class="g2 f62 mt10">
+    <div>
+      <h3 class="c-danger" style="font-size:.9em;">Phase 1 : Audit &amp; Identification</h3>
+      <div class="card card-danger">
+        <ul>
+          <li>Analyse du code source avec SonarQube (SAST)</li>
+          <li>Scan DAST de l'application avec OWASP ZAP</li>
+          <li>Analyse des dépendances avec Snyk (SCA)</li>
+          <li>Détection secrets exposés avec GitLeaks</li>
+          <li>Réalisation du Threat Modeling STRIDE</li>
+          <li>Cartographie des vulnérabilités OWASP</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3 class="c-ok" style="font-size:.9em;">Phase 2 : Sécurisation</h3>
+      <div class="card card-success">
+        <ul>
+          <li>Corriger les injections SQL → PreparedStatement</li>
+          <li>Implémenter Spring Security + JWT</li>
+          <li>Configurer CSP, HSTS, security headers</li>
+          <li>Supprimer les secrets hardcodés → Vault</li>
+          <li>Mettre à jour les dépendances vulnérables</li>
+          <li>Ajouter la validation &amp; le logging sécurité</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card card-l f62 mt10">
+    <h4 class="c-accent" style="margin-top:0">Livrables attendus</h4>
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <span class="tag">Rapport d'audit sécurité</span>
+      <span class="tag">Threat Model documenté</span>
+      <span class="tag">Rapport SAST/DAST/SCA</span>
+      <span class="tag">Code corrigé (Pull Request)</span>
+      <span class="tag">Tests de non-régression</span>
+      <span class="tag">Présentation soutenance</span>
+      <span class="tag">Architecture sécurité cible</span>
+      <span class="tag">Plan de remédiation priorisé</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MODULE 9 — SECTION COVER
+══════════════════════════════════════════════ -->
+<section class="sec-cover center" data-background-color="#060e20">
+  <div class="sec-num">M9</div>
+  <span class="badge b-gold" style="font-size:.45em;">Module 9 · 6h</span>
+  <h2 style="color:#fff; font-size:1.8em; margin-top:18px; border:none;">
+    Évaluation Finale
+  </h2>
+  <h3 style="color:var(--accent); font-weight:400;">
+    Démo Projet · QCM/QRO · Soutenance · Feedback
+  </h3>
+</section>
+
+<!-- M9 — Évaluation -->
+<section>
+  <h2>Évaluation — Modalités &amp; Critères</h2>
+  <div class="g3 f62 center">
+    <div class="card card-l" style="text-align:center;">
+      <div style="font-size:2.2em; margin-bottom:8px;">🎯</div>
+      <h4 class="c-accent" style="margin-top:0">Démo Projet</h4>
+      <p>Démonstration de l'application sécurisée. Explication des choix techniques. Session de questions jury.</p>
+      <span class="badge b-gold">40%</span>
+    </div>
+    <div class="card card-l" style="text-align:center;">
+      <div style="font-size:2.2em; margin-bottom:8px;">📝</div>
+      <h4 class="c-accent" style="margin-top:0">QCM / QRO</h4>
+      <p>Questions théoriques sur OWASP, SSDLC, DevSecOps, JWT/OAuth2, architectures sécurisées.</p>
+      <span class="badge b-gold">30%</span>
+    </div>
+    <div class="card card-l" style="text-align:center;">
+      <div style="font-size:2.2em; margin-bottom:8px;">📋</div>
+      <h4 class="c-accent" style="margin-top:0">Rapport Écrit</h4>
+      <p>Rapport d'audit, Threat Model, plan de remédiation priorisé, recommandations architecturales.</p>
+      <span class="badge b-gold">30%</span>
+    </div>
+  </div>
+  <div class="hbox f62 center mt10">
+    <strong>Critères d'évaluation :</strong> Rigueur technique de l'audit · Qualité du code corrigé · Profondeur de l'analyse des risques · Clarté de la présentation · Pertinence des recommandations
+  </div>
+  <div class="card f60 center mt10" style="border-color:var(--gold);">
+    <strong class="c-gold">Objectif final :</strong> Être capable d'auditer, corriger et sécuriser une application dans le cadre d'un projet professionnel réel
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CONCLUSION
+══════════════════════════════════════════════ -->
+<section data-background-color="#060e20" class="center">
+  <h2 style="color:#fff; border:none; font-size:1.3em;">
+    Récapitulatif — La Sécurité par le Design
+  </h2>
+  <div class="g3 f60" style="margin:18px 0;">
+    <div class="stat-box">
+      <span class="stat-num" style="font-size:1.3em;">Shift Left</span>
+      <span class="stat-lbl">Intégrer la sécurité le plus tôt possible — dès la conception</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" style="font-size:1.3em;">Automate</span>
+      <span class="stat-lbl">SAST + DAST + SCA dans chaque pipeline CI/CD</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" style="font-size:1.3em;">Culture</span>
+      <span class="stat-lbl">La sécurité est la responsabilité de toute l'équipe — pas d'une seule personne</span>
+    </div>
+  </div>
+  <div class="hbox" style="margin:18px 0; text-align:center;">
+    <h3 class="c-gold" style="margin:0 0 10px 0; font-size:1.1em;">
+      "Security is not a feature — it's a foundation"
+    </h3>
+    <p class="f65">
+      La sécurité n'est pas une case à cocher en fin de projet.<br>
+      C'est une discipline intégrée à chaque décision de conception, chaque ligne de code, chaque déploiement.
+    </p>
+  </div>
+  <div class="g3 f60" style="margin-bottom:16px;">
+    <div class="card" style="text-align:center; border-color:var(--blue-light);">
+      <strong class="c-accent">SSDLC</strong><br>
+      Security dans tout le cycle de vie
+    </div>
+    <div class="card" style="text-align:center; border-color:var(--accent2);">
+      <strong class="c-ok">OWASP</strong><br>
+      Connaître pour mieux prévenir
+    </div>
+    <div class="card" style="text-align:center; border-color:var(--warning);">
+      <strong class="c-warn">DevSecOps</strong><br>
+      Automatiser la sécurité en continu
+    </div>
+  </div>
+  <div style="font-size:.5em; color:var(--muted); border-top:1px solid rgba(255,255,255,.1); padding-top:12px;">
+    <strong style="color:#fff; font-size:1.3em;">Moustapha SENE</strong> · killamo5@gmail.com<br>
+    Sécurité des SI — ISI · 2025-2026
+  </div>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<!-- Footer persistant -->
+<div class="footer-bar">
+  <span>Moustapha SENE · killamo5@gmail.com</span>
+  <span style="color:rgba(255,255,255,.5); font-size:.9em; letter-spacing:.08em;">SÉCURITÉ DES SI</span>
+  <span>ISI · 2025-2026</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    controlsTutorial: false,
+    center: false,
+    width: 1280,
+    height: 760,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+    plugins: [ RevealHighlight, RevealNotes, RevealZoom ]
+  });
+</script>
+</body>
+</html>

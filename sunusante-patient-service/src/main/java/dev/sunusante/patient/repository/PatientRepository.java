@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Long> {}
+public interface PatientRepository extends JpaRepository<Patient, Long> {
+    java.util.Optional<Patient> findOneByPseudo(String pseudo);
+}

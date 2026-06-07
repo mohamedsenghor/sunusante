@@ -51,6 +51,7 @@ public class PatientAsserts {
             .satisfies(e -> assertThat(e.getPseudo()).as("check pseudo").isEqualTo(actual.getPseudo()))
             .satisfies(e -> assertThat(e.getFirstName()).as("check firstName").isEqualTo(actual.getFirstName()))
             .satisfies(e -> assertThat(e.getLastName()).as("check lastName").isEqualTo(actual.getLastName()))
+            .satisfies(e -> assertThat(e.getEmail()).as("check email").isEqualTo(actual.getEmail()))
             .satisfies(e -> assertThat(e.getBirthDate()).as("check birthDate").isEqualTo(actual.getBirthDate()))
             .satisfies(e -> assertThat(e.getIdType()).as("check idType").isEqualTo(actual.getIdType()))
             .satisfies(e -> assertThat(e.getIdValue()).as("check idValue").isEqualTo(actual.getIdValue()));

@@ -26,6 +26,9 @@
             <column name="last_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_patient__email" />
+            </column>
             <column name="birth_date" type="date">
                 <constraints nullable="false" />
             </column>
@@ -60,6 +63,7 @@
             <column name="pseudo" type="string"/>
             <column name="first_name" type="string"/>
             <column name="last_name" type="string"/>
+            <column name="email" type="string"/>
             <column name="birth_date" type="date"/>
             <column name="id_type" type="string"/>
             <column name="id_value" type="string"/>
