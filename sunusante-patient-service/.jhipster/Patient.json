@@ -1,0 +1,72 @@
+{
+  "annotations": {
+    "changelogDate": "20260608101509"
+  },
+  "applications": "*",
+  "clientRootFolder": "sunusantePatientService",
+  "databaseType": "sql",
+  "documentation": "Patient Microservice (PII Storage)\\nGère les données d'identification du patient",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "login",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "pseudo",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "firstName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "birthDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "idType",
+      "fieldType": "IdentifierType",
+      "fieldValues": "NIN,BIRTH_CERTIFICATE,PROVISIONAL_PARENT_LINK"
+    },
+    {
+      "fieldName": "idValue",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "sunusantePatientService",
+  "name": "Patient",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "legalGuardian",
+      "otherEntityRelationshipName": "dependent",
+      "relationshipName": "guardian",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "patientConsent",
+      "otherEntityRelationshipName": "patient",
+      "relationshipName": "consent",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,53 @@
+{
+  "annotations": {
+    "changelogDate": "20260608095918"
+  },
+  "applications": "*",
+  "clientRootFolder": "sunusanteDmpService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "issuedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "validUntil",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "microserviceName": "sunusanteDmpService",
+  "name": "Prescription",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "medicalEntry",
+      "relationshipName": "entry",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

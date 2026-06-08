@@ -1,0 +1,45 @@
+{
+  "annotations": {
+    "changelogDate": "20260608101511"
+  },
+  "applications": "*",
+  "clientRootFolder": "sunusantePatientService",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "guardianType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "microserviceName": "sunusantePatientService",
+  "name": "LegalGuardian",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "patient",
+      "otherEntityRelationshipName": "guardian",
+      "relationshipName": "dependent",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
